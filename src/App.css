@@ -1,0 +1,131 @@
+:root {
+    /* --orange-color: #ff5900; */
+    --orange-color: #00ff00;
+    --header-color: #000;
+    --title-color: #21252b;
+    --body-color: #282c34;
+    --text-color: #abb2bf;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Changa&family=Orbitron&display=swap');
+
+#top {
+    background-color: var(--header-color);
+    margin: 0;
+    text-align: right !important;  
+}
+
+#navItem {
+    color: #fff !important;
+    font-size: 1.5em !important;
+    margin-left: 35px;
+    margin-right: 75px;
+    text-align: center;
+    font-family: 'Orbitron', sans-serif !important;
+}
+
+@media only screen and (max-width: 765px) {
+    #navItem {
+      margin-left: 0px !important;
+      margin-right: 0px !important;
+    }
+}
+
+#navItem:hover {
+    color: var(--orange-color) !important;
+}
+
+#hamburgerButton {
+    background-color: var(--orange-color) !important;
+    z-index: 0;
+    margin-right: 10px
+}
+
+.custom-toggler .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(0,0,0, 1)' stroke-width='3' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+}
+
+#containerNavId {
+    margin-left: 0;
+    padding-left: 0;
+    margin-right: 0;
+    padding-right: 0;
+    z-index: 100;
+}
+
+#title {
+    padding-top: 2% !important;
+    padding-bottom: 2% !important;
+    background-color: var(--title-color) !important;
+    color: var(--orange-color) !important;
+    margin-bottom: 0;
+}
+
+#notFound {
+    background-color: var(--title-color) !important;
+    color: var(--orange-color) !important;
+    margin-bottom: 0;
+    height: 80%;
+    width: 100%;
+    position: absolute;
+}
+
+#titleNotFound {
+    margin-top: 11%;
+    font-size: 3.5em;
+}
+
+#titleH1 {
+    margin: auto;
+    font-size: 3.5em;
+}
+
+footer {
+    text-align: center !important;
+    font-size: 18px !important;
+    background-color: var(--header-color);
+    bottom: 0 !important;
+    width: 100%;
+    position: relative !important;
+}
+
+body {
+    font-family: 'Changa', sans-serif;
+    background-color: var(--body-color) !important;
+    color: var(--text-color) !important;
+}
+
+#nameEnd {
+    color: var(--orange-color) !important;
+    font-family: 'Orbitron', sans-serif !important;
+}
+
+#socialsHeader {
+    color: white !important;
+    font-size: 28px !important;
+    font-family: 'Orbitron', sans-serif !important;
+}
+
+.btn.btn-social-icon {
+    width: 50px;
+    height: 50px;
+    padding: 0
+}
+
+.btn-outline-github {
+    border: 2px solid white;
+    color: white;
+    border-radius: 25px;
+}
+
+.btn-outline-github:hover {
+    background: #181c24;
+    color: #ffffff
+}
+
+#socialButton {
+    margin-right: 10px;
+}
+
+
+
