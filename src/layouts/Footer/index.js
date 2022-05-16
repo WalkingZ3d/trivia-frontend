@@ -23,7 +23,7 @@ const Footer = () => {
                 </div>
             </div>
         </div>       
-        <p id="nameEnd"> &copy; {new Date().getFullYear()} Copyright: GroupName </p>
+        <p id="nameEnd"> &copy; {new Date().getFullYear()} Copyright: Neweet </p>
     </footer>
     )
 }

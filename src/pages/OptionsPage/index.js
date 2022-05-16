@@ -1,8 +1,17 @@
 import React, {useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
+import { getNumOfPlayers, getCategory, getNumOfTurns, getDifficulty } from '../../actions';
 
 const OptionsPage = () => {
+
+    const dispatch = useDispatch();
+
+    const numPlayers = useSelector(state => state.numOfPlayers);
+    const category = useSelector(state => state.category);
+    const numTurns = useSelector(state => state.numTurns);
+    const difficulty = useSelector(state => state.difficulty);
 
     const [categories, setCategories] = useState([]);
     const navigate = useNavigate();
@@ -21,7 +30,8 @@ const OptionsPage = () => {
                 console.error(err);
             }        
         }  
-        getCategories();  
+        getCategories(); 
+        console.log("store says: ", numPlayers);  
     },[])
 
     function handleSubmit(e) {
@@ -31,7 +41,8 @@ const OptionsPage = () => {
         let numTurns = document.getElementById('numTurns').value;
         let difficulty = document.getElementById('difficulty').value;
         console.log(numPlayers, category, numTurns, difficulty)
-        //navigate('/options/players');
+        let search = formInp => dispatch(getNumOfPlayers(numPlayers));
+        navigate('/options/players');
     }
 
     function renderCategories() {
