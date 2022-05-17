@@ -43,14 +43,14 @@ const GamePage = () => {
 
     const handleClick = (e) => {
        
-       const buttonClicked = e.target.id
-        console.log(e.target.id)
-        if (buttonClicked === "correct") {
+       const buttonClicked = e.target.id;
+        console.log(buttonClicked)
+        if (buttonClicked === "correctCard") {
             document.getElementById('correctCard').style.backgroundColor = '#0F0';
             document.getElementById('correctCard').style.fontWeight = 'bold';
         } else {
-            document.getElementById(`card${e.target.id}`).style.backgroundColor = '#F00';
-            document.getElementById(`card${e.target.id}`).style.fontWeight = 'bold';
+            document.getElementById(`card${e.target.id.slice(-1)}`).style.backgroundColor = '#F00';
+            document.getElementById(`card${e.target.id.slice(-1)}`).style.fontWeight = 'bold';
         }
 
     }   
