@@ -2,18 +2,15 @@ import React, {useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
-import { getNumOfPlayers, getCategory, getNumOfTurns, getDifficulty } from '../../actions';
+import { getNumOfPlayers, getCategory, getNumOfTurns, getDifficulty, getCategoryID } from '../../actions';
 
 const OptionsPage = () => {
 
     const dispatch = useDispatch();
 
-    const numPlayers = useSelector(state => state.numOfPlayers);
-    const category = useSelector(state => state.category);
-    const numTurns = useSelector(state => state.numTurns);
-    const difficulty = useSelector(state => state.difficulty);
-
     const [categories, setCategories] = useState([]);
+
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -31,17 +28,31 @@ const OptionsPage = () => {
             }        
         }  
         getCategories(); 
-        console.log("store says: ", numPlayers);  
+
     },[])
 
     function handleSubmit(e) {
         e.preventDefault();
         let numPlayers = document.getElementById('numPlayers').value;
         let category = document.getElementById('category').value;
+        let categoryID = 0;
+        for (let i = 0; i < categories.length; i++) {
+            if (categories[i] === (category)) {
+                categoryID = (i+9)
+            }            
+        }
         let numTurns = document.getElementById('numTurns').value;
-        let difficulty = document.getElementById('difficulty').value;
-        console.log(numPlayers, category, numTurns, difficulty)
-        let search = formInp => dispatch(getNumOfPlayers(numPlayers));
+        let difficulty = document.getElementById('difficulty').value;       
+        let updatePlayerNum = numOfPlayers => dispatch(getNumOfPlayers(numOfPlayers));
+        updatePlayerNum(numPlayers);
+        let updateCategory = category => dispatch(getCategory(category));
+        updateCategory(category);
+        let updateCategoryID = categoryID => dispatch(getCategoryID(categoryID));
+        updateCategoryID(categoryID);
+        let updateTurnsNum = numTurns => dispatch(getNumOfTurns(numTurns));
+        updateTurnsNum(numTurns*numPlayers);
+        let updateDifficulty = difficulty => dispatch(getDifficulty(difficulty));
+        updateDifficulty(difficulty);
         navigate('/options/players');
     }
 
@@ -69,8 +80,10 @@ const OptionsPage = () => {
                         {renderCategories()}
                     </select>
                     <br/><br/>
-                    <label htmlFor="numTurns" className='optionsLabel'>Number of Turns: </label>
-                    <input type="number" id='numTurns' name='numTurns' className='optionsInp' min='1' max='20' defaultValue='1'/>
+
+                    <label htmlFor="numTurns" className='optionsLabel'>Questions Per Player: </label>
+                    <input type="number" id='numTurns' name='numTurns' className='optionsInp' min='1' max='10' defaultValue='1'/>
+
                     <br/><br/>
                     <label htmlFor="difficulty" className='optionsLabel'>Difficulty: </label>
                     <select type="text" id='difficulty' name='difficulty' className='optionsInp'>
