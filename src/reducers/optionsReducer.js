@@ -1,7 +1,9 @@
+
 const initState = { numOfPlayers: 0, category: "", categorgyID: 0, numOfTurns: 0, difficulty: "", player1: "", player2: "", player3: "", player4: ""};
 
 const searchReducer = (state=initState, action) => {
     //console.log("incoming payload: ", action.payload)
+
     switch(action.type){
         case 'LOAD_PLAYERS':
             return { ...state, numOfPlayers: action.payload};
