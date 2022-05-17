@@ -13,7 +13,7 @@ const GamePage = () => {
 
     const[counter, setCounter] = useState(0);
 
-    const[score, setScore] = useState(0);
+    //const[score, setScore] = useState(0);
 
     //const[question, setQuestion] = useState({})
 
@@ -43,68 +43,80 @@ const GamePage = () => {
     
     const question = questions[counter]
 
+    let newScore = 0;
+
     const handleClick = (e) => {      
+        document.getElementById('correctCard').disabled = true;
+        document.getElementById('correct').disabled = true;
+        document.getElementById(`card0`).disabled = true;
+        document.getElementById(`0`).disabled = true;
+        document.getElementById(`card1`).disabled = true;
+        document.getElementById(`2`).disabled = true;
+        document.getElementById(`card2`).disabled = true;
+        document.getElementById(`2`).disabled = true;
         const buttonClicked = e.target.id;
         console.log("this one being clicked, ", buttonClicked)
         const theID = e.target.id.slice(-1);
-            if (buttonClicked === "correctCard" || buttonClicked === "correct") {
-                document.getElementById('correctCard').style.backgroundColor = '#0F0';
-                document.getElementById('correctCard').style.fontWeight = 'bold';
-            } else {
-                document.getElementById(`card${theID}`).style.backgroundColor = '#F00';
-                document.getElementById(`card${theID}`).style.fontWeight = 'bold';
-            }
-     
+        if (buttonClicked === "correctCard" || buttonClicked === "correct") {
+            document.getElementById('correctCard').style.backgroundColor = '#0F0';
+            document.getElementById('correctCard').style.fontWeight = 'bold';
+            newScore += 1;
+            
+        } else {
+            document.getElementById(`card${theID}`).style.backgroundColor = '#F00';
+            document.getElementById(`card${theID}`).style.fontWeight = 'bold';          
+        }
+        console.log('SCORE: ', newScore)
 
-            if (theID == '0' || theID == '1' || theID == '2') {
-                const myTimeout = setTimeout(myStopFunction, 1000);
-                
-                function myStopFunction() {        
-                    document.getElementById('correctCard').style.backgroundColor = 'cyan';
-                    document.getElementById('correctCard').style.fontWeight = 'normal'; 
-                    setScore(prev => prev + 1); 
-                    clearTimeout(myTimeout);
+        if (theID == '0' || theID == '1' || theID == '2') {
+            const myTimeout = setTimeout(myStopFunction, 1000);
+            
+            function myStopFunction() {        
+                document.getElementById('correctCard').style.backgroundColor = 'cyan';
+                document.getElementById('correctCard').style.fontWeight = 'normal';                      
+                clearTimeout(myTimeout);
+            }
+            const myTimeout2 = setTimeout(myStopFunction2, 4000);
+            
+            function myStopFunction2() {                         
+                document.getElementById('correctCard').style.backgroundColor = '#abb2bf';
+                document.getElementById('correctCard').style.fontWeight = 'normal';  
+                document.getElementById(`card0`).style.backgroundColor = '#abb2bf';
+                document.getElementById(`card0`).style.fontWeight = 'normal';
+                document.getElementById(`card1`).style.backgroundColor = '#abb2bf';
+                document.getElementById(`card1`).style.fontWeight = 'normal';
+                document.getElementById(`card2`).style.backgroundColor = '#abb2bf';
+                document.getElementById(`card2`).style.fontWeight = 'normal';                
+                clearTimeout(myTimeout2);
+                setCounter(prev => prev + 1) 
+                if (counter + 1  >= quizLength) {
+                    document.getElementById('over').textContent =  'Thanks For Playing';
+                    document.getElementById('score').textContent =  `Your Score Was: ${score}`;
                 }
-                const myTimeout2 = setTimeout(myStopFunction2, 4000);
-                
-                function myStopFunction2() {                         
-                    document.getElementById('correctCard').style.backgroundColor = '#abb2bf';
-                    document.getElementById('correctCard').style.fontWeight = 'normal';  
-                    document.getElementById(`card0`).style.backgroundColor = '#abb2bf';
-                    document.getElementById(`card0`).style.fontWeight = 'normal';
-                    document.getElementById(`card1`).style.backgroundColor = '#abb2bf';
-                    document.getElementById(`card1`).style.fontWeight = 'normal';
-                    document.getElementById(`card2`).style.backgroundColor = '#abb2bf';
-                    document.getElementById(`card2`).style.fontWeight = 'normal';                
-                    clearTimeout(myTimeout2);
-                    setCounter(prev => prev + 1) 
-                    if (counter + 1  >= quizLength) {
-                        document.getElementById('over').textContent =  'Thanks For Playing';
-                        document.getElementById('score').textContent =  `Your Score Was: ${score}`;
-                    }
-                }   
-                
-            } else {
-                const myTimeout3 = setTimeout(myStopFunction3, 5000);
-                
-                function myStopFunction3() {                                     
-                    document.getElementById('correctCard').style.backgroundColor = '#abb2bf';
-                    document.getElementById('correctCard').style.fontWeight = 'normal';        
-                    document.getElementById(`card0`).style.backgroundColor = '#abb2bf';
-                    document.getElementById(`card0`).style.fontWeight = 'normal';
-                    document.getElementById(`card1`).style.backgroundColor = '#abb2bf';
-                    document.getElementById(`card1`).style.fontWeight = 'normal';
-                    document.getElementById(`card2`).style.backgroundColor = '#abb2bf';
-                    document.getElementById(`card2`).style.fontWeight = 'normal';                
-                    clearTimeout(myTimeout3);
-                    setCounter(prev => prev + 1)
-                    if (counter + 1  >= quizLength) {
-                        console.log("done")
-                        document.getElementById('over').textContent =  'Thanks For Playing';
-                        document.getElementById('score').textContent =  `Your Score Was: ${score}`;
-                    }
-                }                    
-            }            
+            }   
+            
+        } else {
+            const myTimeout3 = setTimeout(myStopFunction3, 5000);
+            
+            function myStopFunction3() {                                     
+                document.getElementById('correctCard').style.backgroundColor = '#abb2bf';
+                document.getElementById('correctCard').style.fontWeight = 'normal';        
+                document.getElementById(`card0`).style.backgroundColor = '#abb2bf';
+                document.getElementById(`card0`).style.fontWeight = 'normal';
+                document.getElementById(`card1`).style.backgroundColor = '#abb2bf';
+                document.getElementById(`card1`).style.fontWeight = 'normal';
+                document.getElementById(`card2`).style.backgroundColor = '#abb2bf';
+                document.getElementById(`card2`).style.fontWeight = 'normal';                
+                clearTimeout(myTimeout3);
+                setCounter(prev => prev + 1)
+                if (counter + 1  >= quizLength) {
+                    console.log("done")
+                    document.getElementById('over').textContent =  'Thanks For Playing';
+                    document.getElementById('score').textContent =  `Your Score Was: ${score}`;
+                }
+            }                    
+        }     
+               
     }   
 
     const quizLength = questions.length;
@@ -123,7 +135,6 @@ const GamePage = () => {
                             </div>
                         </button>
                     </div>)  
-            
         } 
         arr.push(   
                 <div id="correct" className="card answer-card naked">
