@@ -10,8 +10,8 @@ const PlayersPage = () => {
     const player4 = useSelector(state => state.player4);
 
     useEffect(() => {
+        console.log("num of players  : ", numPlayers);
         console.log("current player 1: ", player1);
-      
         console.log("current player 2: ", player2);
         console.log("current player 3: ", player3);
         console.log("current player 4: ", player4);

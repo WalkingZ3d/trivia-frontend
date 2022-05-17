@@ -55,6 +55,8 @@
 .optionsLabel {
     width: 100%;
     text-align: center;
+    color: #fff;
+    font-family: 'Orbitron', sans-serif !important;
 }
 
 .optionsInp {
