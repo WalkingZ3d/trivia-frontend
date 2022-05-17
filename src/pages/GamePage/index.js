@@ -11,19 +11,20 @@ const GamePage = () => {
 
     const[questions, setQuestions] = useState([]); 
 
-    const numOfPlayers = useSelector(state => state.numOfPlayers);
-    const category = useSelector(state => state.category);
+    const categoryID = useSelector(state => state.categoryID);
     const numOfTurns = useSelector(state => state.numOfTurns);
     const difficulty = useSelector(state => state.difficulty);
+
+    console.log( numOfTurns, categoryID, difficulty.toLowerCase())
 
     useEffect( () => {
     
     async function getQuestions () {
 
         try {
-           // const result = await axios.get(`https://opentdb.com/api.php?amount=${numOfTurns}&category=${category}&difficulty=${difficulty}&type=multiple`);
-            const result = await axios.get(`https://opentdb.com/api.php?amount=1&category=9&difficulty=medium&type=multiple`);
-           
+            const result = await axios.get(`https://opentdb.com/api.php?amount=${numOfTurns}&category=${categoryID}&difficulty=${difficulty.toLowerCase()}&type=multiple`);
+           // const result = await axios.get(`https://opentdb.com/api.php?amount=1&category=9&difficulty=medium&type=multiple`);
+           console.log(result.data.results)
             setQuestions(result.data.results);
             
             
@@ -39,32 +40,45 @@ const GamePage = () => {
 
     const question = questions[0];
 
-   // const renderQuestion = () => questions.map((q, i) => <h3 key={i}>{q.question}</h3>)
-   // const renderAnswer = () => questions.map((q, i) => <p key={i}>{q.correct_answer}</p>)
 
-   //const renderIncorrectAnswers = () => question.incorrect_answers.map((q, i) =>  <li>{q}</li>)
+    const handleClick = (e) => {
+       
+       const buttonClicked = e.target.id
+        console.log(e.target.id)
+        if (buttonClicked === "correct") {
+            e.target.style.backgroundColor = "green"
+        } else {
+            e.target.style.backgroundColor = "red"
+        }
 
-   function renderIncorrectAnswers () {
+    }    
+
+    function renderIncorrectAnswers () {
         let arr = [];
 
-    for (let index = 0; index < question.incorrect_answers.length; index++) {
-        
-        arr.push(   <div className="card answer-card">
-                        <div className="card-body text-center">
-                        <p className="card-text">{question.incorrect_answers[index].replace(regQuotes, '"').replace(regApost, '’').replace(funnyI, 'í').replace(funnyO,'ö').replace(aRing, 'å').replace(funnyA, 'ä')}</p>
-                        </div>
-                    </div>)                             
-                                                    
-   } 
-        arr.push(   <div className="card answer-card bg-danger">
-                        <div className="card-body text-center">
-                        {question && <p>{question.correct_answer.replace(regQuotes, '"').replace(regApost, '’').replace(funnyI, 'í').replace(funnyO,'ö').replace(aRing, 'å').replace(funnyA, 'ä')}</p>}
-                        </div>
-                    </div>)
+        for (let index = 0; index < question.incorrect_answers.length; index++) {
+            
+            arr.push(   <div id={index} className="card answer-card naked">
+                            <button id={index} onClick={handleClick} className="naked">
+                                <div id={index} className="card-body text-center">
+                                    <p id={index} className="card-text">{question.incorrect_answers[index].replace(regQuotes, '"').replace(regApost, '’').replace(funnyI, 'í').replace(funnyO,'ö').replace(aRing, 'å').replace(funnyA, 'ä').replace(funnyO2, 'ó').replace(softHyphen, '').replace(funnyA2, 'á').replace(funnyE, 'é').replace(andSymb, '&')}</p>
+                                </div>
+                            </button>
+                        </div>)                                                                            
+        } 
+            arr.push(   
+                    <div id="correct" className="card answer-card naked">
+                        <button id="correct"  onClick={handleClick} className="naked">
+                            <div id="correct"  className="card-body text-center">
+                                {question && <p id="correct" >{question.correct_answer.replace(regQuotes, '"').replace(regApost, '’').replace(funnyI, 'í').replace(funnyO,'ö').replace(aRing, 'å').replace(funnyA, 'ä').replace(funnyO2, 'ó').replace(softHyphen, '').replace(funnyA2, 'á').replace(funnyE, 'é').replace(andSymb, '&')}</p>}
+                            </div>
+                        </button>
+                    </div>
+                    )
 
-        shuffle(arr);
+            shuffle(arr);
 
-   return arr;
+    return arr;
 }
    
 function shuffle(array) {
@@ -83,19 +97,20 @@ function shuffle(array) {
   return array;
 }
 
-    
-
-   // const renderQuestionCards = () => questions.map((q, i) => <QuestionCard key={i} question = {q.question} answer = {q.correct_answer} />)
-
     const regQuotes = /\&quot;|\&ldquo;|\&rdquo;/g;
-    //const regDQoutes = /\&ldquo;/g;
-    const regApost = /\&#039;/g;
+    const regApost = /\&#039;|\&rsquo;/g;
     const funnyI = /\&iacute;/g;
     const funnyO = /\&ouml;/g;
     const aRing = /\&aring;/g;
     const funnyA = /\k&auml;/g;
-    const q = "Sk&auml;rm"
-    console.log(q.replace(funnyA, 'ä'))
+    const funnyA2 = /\&aacute;/g;
+    const funnyO2 = /\&oacute;/g;
+    const funnyE = /\&Eacute;|\&eacute/g;
+    const softHyphen = /\&shy;|\&lrm;/g;
+    const andSymb = /\&amp;/g;
+    // const p = "Bogot&aacute;"
+    // console.log(p.replace(funnyA2, 'á'))
+
     return <>
         
         <div className="jumbotron text-center" id="title">
@@ -107,7 +122,7 @@ function shuffle(array) {
         <div className="container-fluid justify-content-center text-center">
             <div className="row ">
                 <div className="col-sm-12 ">
-                {question && <h3>{question.question.replace(regQuotes, '"').replace(regApost, '’').replace(funnyI, 'í').replace(funnyO,'ö').replace(aRing, 'å').replace(funnyA, 'ä')}</h3>}
+                    {question && <h3>{question.question.replace(regQuotes, '"').replace(regApost, '’').replace(funnyI, 'í').replace(funnyO,'ö').replace(aRing, 'å').replace(funnyA, 'ä').replace(funnyO2, 'ó').replace(softHyphen, '').replace(funnyA2, 'á').replace(funnyE, 'é').replace(andSymb, '&')}</h3>}
                 </div>
             </div>
         </div>
@@ -115,9 +130,6 @@ function shuffle(array) {
                 {question && renderIncorrectAnswers()}
         </div> 
       <br></br>
-        
-        {/* <QuestionCard questions={questions} />  */}
-
         </>
     
 }

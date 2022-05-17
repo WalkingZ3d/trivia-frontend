@@ -216,7 +216,24 @@ body {
 
 .answers {
 
+    height: 200px;
     padding: 20px;
+
 }
 
+.naked {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background-color: var(--text-color);
+    color: #000;
+    border-radius: 15px;
+}
+
+.answerText {
+    color: #fff;
+    opacity: 100;
+}
 
