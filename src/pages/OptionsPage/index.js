@@ -10,6 +10,7 @@ const OptionsPage = () => {
 
     const [categories, setCategories] = useState([]);
 
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -27,6 +28,7 @@ const OptionsPage = () => {
             }        
         }  
         getCategories(); 
+
     },[])
 
     function handleSubmit(e) {
@@ -78,8 +80,10 @@ const OptionsPage = () => {
                         {renderCategories()}
                     </select>
                     <br/><br/>
+
                     <label htmlFor="numTurns" className='optionsLabel'>Questions Per Player: </label>
                     <input type="number" id='numTurns' name='numTurns' className='optionsInp' min='1' max='10' defaultValue='1'/>
+
                     <br/><br/>
                     <label htmlFor="difficulty" className='optionsLabel'>Difficulty: </label>
                     <select type="text" id='difficulty' name='difficulty' className='optionsInp'>

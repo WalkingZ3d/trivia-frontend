@@ -53,6 +53,7 @@ const PlayersPage = () => {
         
         navigate('/options/players/game')
 
+
     }
 
     function renderPlayers(times) {
@@ -62,7 +63,9 @@ const PlayersPage = () => {
         }
         return arr.map((s, i) => <>
                                     <label htmlFor="numPlayers" className='optionsLabel'>Player {s+1}: </label>
+
                                     <input key={s} type="text" id={`numPlayer${i+1}`} name='numPLayers' className='optionsInp' placeholder={`Enter username of player ${i+1}`} required/>
+
                                     <br/><br/>
                                 </>)         
     }
@@ -79,7 +82,9 @@ const PlayersPage = () => {
             <div className="row ">
                 <div className="col-sm-12 ">
                 <form onSubmit={handleSubmit} role="form"> 
+
                     { renderPlayers(numPlayers) }
+
                     <input type='submit' value='Next' id='cardBtn'/>
                 </form>
                 </div>
