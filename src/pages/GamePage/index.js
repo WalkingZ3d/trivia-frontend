@@ -22,8 +22,8 @@ const GamePage = () => {
     async function getQuestions () {
 
         try {
-            const result = await axios.get(`https://opentdb.com/api.php?amount=${numOfTurns}&category=${categoryID}&difficulty=${difficulty.toLowerCase()}&type=multiple`);
-           // const result = await axios.get(`https://opentdb.com/api.php?amount=1&category=9&difficulty=medium&type=multiple`);
+           // const result = await axios.get(`https://opentdb.com/api.php?amount=${numOfTurns}&category=${categoryID}&difficulty=${difficulty.toLowerCase()}&type=multiple`);
+            const result = await axios.get(`https://opentdb.com/api.php?amount=1&category=9&difficulty=medium&type=multiple`);
            console.log(result.data.results)
             setQuestions(result.data.results);
             
@@ -46,12 +46,14 @@ const GamePage = () => {
        const buttonClicked = e.target.id
         console.log(e.target.id)
         if (buttonClicked === "correct") {
-            e.target.style.backgroundColor = "green"
+            document.getElementById('correctCard').style.backgroundColor = '#0F0';
+            document.getElementById('correctCard').style.fontWeight = 'bold';
         } else {
-            e.target.style.backgroundColor = "red"
+            document.getElementById(`card${e.target.id}`).style.backgroundColor = '#F00';
+            document.getElementById(`card${e.target.id}`).style.fontWeight = 'bold';
         }
 
-    }    
+    }   
 
     function renderIncorrectAnswers () {
         let arr = [];
@@ -59,7 +61,7 @@ const GamePage = () => {
         for (let index = 0; index < question.incorrect_answers.length; index++) {
             
             arr.push(   <div id={index} className="card answer-card naked">
-                            <button id={index} onClick={handleClick} className="naked">
+                            <button id={`card${index}`} onClick={handleClick} className="naked">
                                 <div id={index} className="card-body text-center">
                                     <p id={index} className="card-text">{question.incorrect_answers[index].replace(regQuotes, '"').replace(regApost, '’').replace(funnyI, 'í').replace(funnyO,'ö').replace(aRing, 'å').replace(funnyA, 'ä').replace(funnyO2, 'ó').replace(softHyphen, '').replace(funnyA2, 'á').replace(funnyE, 'é').replace(andSymb, '&')}</p>
                                 </div>
@@ -68,7 +70,7 @@ const GamePage = () => {
         } 
             arr.push(   
                     <div id="correct" className="card answer-card naked">
-                        <button id="correct"  onClick={handleClick} className="naked">
+                        <button id='correctCard'  onClick={handleClick} className="naked">
                             <div id="correct"  className="card-body text-center">
                                 {question && <p id="correct" >{question.correct_answer.replace(regQuotes, '"').replace(regApost, '’').replace(funnyI, 'í').replace(funnyO,'ö').replace(aRing, 'å').replace(funnyA, 'ä').replace(funnyO2, 'ó').replace(softHyphen, '').replace(funnyA2, 'á').replace(funnyE, 'é').replace(andSymb, '&')}</p>}
                             </div>
