@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 const loadNumOfPlayers = ({ numOfPlayers}) => ({ 
     type: 'LOAD_PLAYERS',
     payload: numOfPlayers

@@ -1,1 +1,1 @@
-export {default as optionsReducer} from './optionsReducer'
+export {default as optionsReducer} from './optionsReducer';
