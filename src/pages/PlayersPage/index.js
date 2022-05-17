@@ -18,22 +18,38 @@ const PlayersPage = () => {
 
     async function handleSubmit(e) {
         e.preventDefault();
-        let player1 = document.getElementById('numPlayer1').value; 
-        let player2 = document.getElementById('numPlayer2').value;
-        let player3 = document.getElementById('numPlayer3').value;
-        let player4 = document.getElementById('numPlayer4').value;    
-        
+        let player1 = document.getElementById('numPlayer1').value;
+        let player2 = ''; 
+        let player3 = ''; 
+        let player4 = ''; 
+
         const updatePlayer1 = player => dispatch(getPlayer1(player));
-        updatePlayer1(player1);
-
         const updatePlayer2 = player => dispatch(getPlayer2(player));
-        updatePlayer2(player2);
-
         const updatePlayer3 = player => dispatch(getPlayer3(player));
-        updatePlayer3(player3);
-
         const updatePlayer4 = player => dispatch(getPlayer4(player));
-        updatePlayer4(player4);
+
+        if (numPlayers == 2) {
+            player2 = document.getElementById('numPlayer2').value;
+            updatePlayer2(player2);
+        }
+
+        if (numPlayers == 3) {
+            player2 = document.getElementById('numPlayer2').value;
+            player3 = document.getElementById('numPlayer3').value;
+            updatePlayer2(player2);
+            updatePlayer3(player3);
+        }
+
+        if (numPlayers == 4) {
+            player2 = document.getElementById('numPlayer2').value;
+            player3 = document.getElementById('numPlayer3').value;
+            player4 = document.getElementById('numPlayer4').value;
+            updatePlayer2(player2);
+            updatePlayer3(player3);
+            updatePlayer4(player4);
+        }         
+        
+        updatePlayer1(player1);
         
         navigate('/options/players/game')
 
