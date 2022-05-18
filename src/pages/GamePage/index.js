@@ -29,6 +29,8 @@ const GamePage = () => {
     const[complete, setComplete] = useState(false);
 
     const[sending, setSending] = useState(false);
+
+    const[scoreChange, setScoreChange] = useState(false)
     
     const categoryID = useSelector(state => state.categoryID);
     const numOfTurns = useSelector(state => state.numOfTurns);
@@ -50,6 +52,13 @@ const GamePage = () => {
         setCurrentPlayer(player1)
         setNextPlayer(player2)
     }, [])
+
+    useEffect( () => {
+        if(scoreChange){
+            updateScore(currentPlayer);
+            setScoreChange(false)
+        }
+    },[scoreChange])
 
     // useEffect( () => {
     //     async function sendToDB() {
@@ -233,7 +242,23 @@ const GamePage = () => {
             document.getElementById('correctCard').style.fontWeight = 'bold';
             document.getElementById('correct').style.backgroundColor = '#0F0';
             document.getElementById('correct').style.fontWeight = 'bold';
-                updateScore(currentPlayer);                                       
+            if(numOfPlayers > 1){
+                const myTimeout = setTimeout(myStopFunction, 5000);
+            
+                function myStopFunction() {        
+                    updateScore(currentPlayer);                   
+                    clearTimeout(myTimeout);
+                }
+            } else {
+                const myTimeout = setTimeout(myStopFunction, 5000);
+            
+                function myStopFunction() {        
+                    setScore1(prev => prev + 1)                   
+                    clearTimeout(myTimeout);
+                }
+            }
+            
+                                                       
         } else {
             document.getElementById(`card${theID}`).style.backgroundColor = '#F00';
             document.getElementById(`card${theID}`).style.fontWeight = 'bold';          
