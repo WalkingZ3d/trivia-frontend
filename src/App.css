@@ -20,6 +20,14 @@
     text-align: center;
 }
 
+#highNum {
+    color: var(--orange-color);
+}
+
+#highName {
+    color: #fff;
+}
+
 #playerInfo {
     color: #fff;
 }

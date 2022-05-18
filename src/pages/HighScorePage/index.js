@@ -6,12 +6,18 @@ const HighScorePage = () => {
     const[highScore, setHighScore] = useState([]);
 
     useEffect( () => {
-    
         async function getQuestions () {
 
             try {
                 const {data} = await axios.get(`https://neweet-server.herokuapp.com/records/winners`);
-                console.log(data);              
+                let arr = [];
+                for (let i = 0; i < data.length; i++) {
+                    arr.push(data[i]);
+                }
+                console.log("pre sort: ", arr)
+                arr.sort((firstItem, secondItem) => secondItem.totWins - firstItem.totWins);
+                console.log("post sort: ", arr)
+                setHighScore(arr);            
             } catch(err) {
                 console.error(err);
             }
@@ -20,6 +26,10 @@ const HighScorePage = () => {
         getQuestions();
     
     }, [])
+
+    function renderScores() {
+        return highScore.map((s,i) => <div className={'highScores'} key={i}><h3>{s._id}: {s.totWins}</h3><br/></div>)
+    }
     
     return (
         <>
@@ -31,7 +41,7 @@ const HighScorePage = () => {
         <div className="container-fluid justify-content-center text-center">
             <div className="row ">
                 <div className="col-sm-12 ">
-                   
+                   {renderScores()}
                 </div>
             </div>
         </div>
