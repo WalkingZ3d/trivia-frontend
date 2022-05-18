@@ -52,56 +52,56 @@ const GamePage = () => {
         setNextPlayer(player2)
     }, [])
 
-    // useEffect( () => {
-    //     async function sendToDB() {
-    //         console.log("winner sent: ", winner[0])
-    //         if (sending) {
-    //             const dataToSend = {
-    //                 'set_turns': numOfTurns,
-    //                 'category': category,
-    //                 'player_number': numOfPlayers,
-    //                 'winner': winner[0],
-    //                 'players_list': [
-    //                                     {
-    //                                         "name": player1, 
-    //                                         "points": score1
-    //                                     },
-    //                                     {
-    //                                         "name": player2, 
-    //                                         "points": score2
-    //                                     },
-    //                                     {
-    //                                         "name": player3, 
-    //                                         "points": score3
-    //                                     },
-    //                                     {
-    //                                         "name": player4, 
-    //                                         "points": score4
-    //                                     }
-    //                                 ],
-    //                 'game_info': {
-    //                     'difficulty': difficulty,
-    //                     'questions': questions
-    //                 }
-    //             }
-    //             console.log("dataToSend: ", dataToSend)
-    //             const headers = {
-    //                 'Content-Type': 'application/json',
-    //                 'Access-Control-Allow-Origin': '*'
-    //             }
-    //             const address = 'https://neweet-server.herokuapp.com/records/create'
-    //             axios({
-    //                 method: 'post',
-    //                 headers: headers,
-    //                 url: address,
-    //                 data: dataToSend
-    //               }).then(function (response) {
-    //                 console.log("response from api:", response);
-    //               });     
-    //         }        
-    //     }
-    //     sendToDB();        
-    // }, [sending])
+    useEffect( () => {
+        async function sendToDB() {
+            console.log("winner sent: ", winner[0])
+            if (sending) {
+                const dataToSend = {
+                    'set_turns': numOfTurns,
+                    'category': category,
+                    'player_number': numOfPlayers,
+                    'winner': winner[0],
+                    'players_list': [
+                                        {
+                                            "name": player1, 
+                                            "points": score1
+                                        },
+                                        {
+                                            "name": player2, 
+                                            "points": score2
+                                        },
+                                        {
+                                            "name": player3, 
+                                            "points": score3
+                                        },
+                                        {
+                                            "name": player4, 
+                                            "points": score4
+                                        }
+                                    ],
+                    'game_info': {
+                        'difficulty': difficulty,
+                        'questions': questions
+                    }
+                }
+                console.log("dataToSend: ", dataToSend)
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                }
+                const address = 'https://neweet-server.herokuapp.com/records/create'
+                axios({
+                    method: 'post',
+                    headers: headers,
+                    url: address,
+                    data: dataToSend
+                  }).then(function (response) {
+                    console.log("response from api:", response);
+                  });     
+            }        
+        }
+        sendToDB();        
+    }, [sending])
 
     useEffect( () => {
         if (gameState === 'over') {
@@ -121,15 +121,10 @@ const GamePage = () => {
 
             try {
                 const result = await axios.get(`https://opentdb.com/api.php?amount=${numOfTurns}&category=${categoryID}&difficulty=${difficulty.toLowerCase()}&type=multiple`);
-                //const result = await axios.get(`https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple`);
-                //console.log(result.data.results)
-                setQuestions(result.data.results);
-                
-                
+                setQuestions(result.data.results);                
             } catch(err) {
                 console.error(err);
-            }
-       
+            }       
         }
         getQuestions();
     
@@ -211,7 +206,7 @@ const GamePage = () => {
                 winsFinal.push(player4)
             }   
         }
-        console.log("number of winners:", winsFinal.length)
+        console.log("number of winners:", winsFinal)
         setWinner(winsFinal)
 
         setSending(true);
