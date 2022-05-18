@@ -112,6 +112,7 @@ const GamePage = () => {
     // }, [sending])
 
     useEffect( () => {
+        console.log("i print if winner is changed")
         if (gameState === 'over') {
             document.getElementById('over').textContent =  'Thanks For Playing!!';
             document.getElementById('winnerNameSpan').textContent = winner[0];
@@ -124,7 +125,7 @@ const GamePage = () => {
             document.getElementById('playerNames').style.marginTop= '30px';
             document.getElementById('againBtn').style.display = 'block';
         }
-    },[gameState, winner])
+    },[winner])
 
     useEffect( () => {
     
@@ -221,15 +222,17 @@ const GamePage = () => {
             winsFinal = [];
             winsFinal.push(player1) 
         }
-        console.log("number of winners:", winsFinal)
+
+        console.log("number of winners:", winsFinal.length)
+
         if (winsFinal.length > 1 && numOfPlayers > 1) {
             console.log('tiebreaker needed')
         } else {
-            console.log('not needed')
+            console.log('tiebreaker not needed')
+            setWinner(winsFinal)
+            setSending(true);
         }
-        setWinner(winsFinal)
-
-        setSending(true);
+        
     }
 
     const handleClick = (e) => {          
@@ -454,6 +457,7 @@ const GamePage = () => {
                 <div className="container-fluid justify-content-center text-center">
                     <div className="row ">
                         <div className="col-sm-12 ">
+                        <br/>
                             <span id='questionsSpan'>{question && <h3>{question.question.replace(regQuotes, '"').replace(regApost, '’').replace(funnyI, 'í').replace(funnyO,'ö').replace(aRing, 'å').replace(funnyA, 'ä').replace(funnyO2, 'ó').replace(softHyphen, '').replace(funnyA2, 'á').replace(funnyE, 'é').replace(andSymb, '&').replace(dots, '...')}</h3>}</span>
                         </div>
                     </div>
