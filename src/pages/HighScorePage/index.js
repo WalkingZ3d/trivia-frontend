@@ -28,7 +28,7 @@ const HighScorePage = () => {
     }, [])
 
     function renderScores() {
-        return highScore.map((s,i) => <div className={'highScores'} key={i}><h3>{s._id}: {s.totWins}</h3><br/></div>)
+        return highScore.map((s,i) => <div className={'highScores'} key={i}><h3 id='highName'>{s._id}: <span id='highNum'>{s.totWins}</span></h3><br/></div>)
     }
     
     return (
