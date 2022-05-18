@@ -1,5 +1,5 @@
 
-const initState = { numOfPlayers: 0, category: "", categorgyID: 0, numOfTurns: 0, difficulty: "", player1: "", player2: "", player3: "", player4: ""};
+const initState = { numOfPlayers: 0, category: "", categorgyID: 0, numOfTurns: 0, difficulty: "", player1: "", player2: "", player3: "", player4: "", score: 0};
 
 const searchReducer = (state=initState, action) => {
     //console.log("incoming payload: ", action.payload)
@@ -23,8 +23,10 @@ const searchReducer = (state=initState, action) => {
             return { ...state, player3: action.payload};
         case 'ADD_PLAYER4': 
             return { ...state, player4: action.payload};
+        case 'SET_SCORE':
+            return { ...state, score: action.payload};
         case 'SET_ERROR':
-            return { ...state, error: action.payload}
+            return { ...state, error: action.payload};
         default :
             return state
     };

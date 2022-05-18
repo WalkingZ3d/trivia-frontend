@@ -106,3 +106,17 @@ export const getPlayer4 = player4 => {
         };
     };
 };
+
+// set score for player 1
+const setScore1 = score => ({ type: 'SET_SCORE', payload: score });
+
+export const getScore1 = score => {
+    return async dispatch => {
+        try {
+            dispatch(setScore1(score));
+        } catch (err) {
+            console.warn(err.message);
+            dispatch({ type: 'SET_ERROR', payload: err.message })
+        };
+    };
+};
