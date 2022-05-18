@@ -60,6 +60,10 @@
 
 }
 
+#score {
+    color: var(--body-color);
+}
+
 .optionsInp {
     text-align: center;
 }

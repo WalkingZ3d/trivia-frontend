@@ -1,11 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { QuestionCard } from '../../components';
-import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { getScore1} from '../../actions';
 
 const GamePage = () => {
+
+    const dispatch = useDispatch();
 
     //const { results } = useParams();
 
@@ -13,13 +14,21 @@ const GamePage = () => {
 
     const[counter, setCounter] = useState(0);
 
-    //const[score, setScore] = useState(0);
+    const[score, setScore] = useState(0);
 
     //const[question, setQuestion] = useState({})
 
     const categoryID = useSelector(state => state.categoryID);
     const numOfTurns = useSelector(state => state.numOfTurns);
     const difficulty = useSelector(state => state.difficulty);
+    //let score = useSelector(state => state.score);
+
+    
+    console.log("score is currently: ", score)   
+
+    useEffect(() => {
+        document.getElementById('score').textContent =  `Your Score Was: ${score}`; 
+    }, [score])
 
     useEffect( () => {
     
@@ -43,30 +52,29 @@ const GamePage = () => {
     
     const question = questions[counter]
 
-    let newScore = 0;
-
     const handleClick = (e) => {      
-        document.getElementById('correctCard').disabled = true;
-        document.getElementById('correct').disabled = true;
-        document.getElementById(`card0`).disabled = true;
-        document.getElementById(`0`).disabled = true;
-        document.getElementById(`card1`).disabled = true;
-        document.getElementById(`2`).disabled = true;
-        document.getElementById(`card2`).disabled = true;
-        document.getElementById(`2`).disabled = true;
+        // document.getElementById('correctCard').disabled = true;
+        // document.getElementById('correct').disabled = true;
+        // document.getElementById(`card0`).disabled = true;
+        // document.getElementById(`0`).disabled = true;
+        // document.getElementById(`card1`).disabled = true;
+        // document.getElementById(`2`).disabled = true;
+        // document.getElementById(`card2`).disabled = true;
+        // document.getElementById(`2`).disabled = true;
         const buttonClicked = e.target.id;
         console.log("this one being clicked, ", buttonClicked)
         const theID = e.target.id.slice(-1);
         if (buttonClicked === "correctCard" || buttonClicked === "correct") {
             document.getElementById('correctCard').style.backgroundColor = '#0F0';
             document.getElementById('correctCard').style.fontWeight = 'bold';
-            newScore += 1;
-            
+                // const updatePlayerScore = score => dispatch(getScore1(score));
+                // updatePlayerScore(1);  
+                setScore(prev => prev + 1)                       
         } else {
             document.getElementById(`card${theID}`).style.backgroundColor = '#F00';
             document.getElementById(`card${theID}`).style.fontWeight = 'bold';          
         }
-        console.log('SCORE: ', newScore)
+       
 
         if (theID == '0' || theID == '1' || theID == '2') {
             const myTimeout = setTimeout(myStopFunction, 1000);
@@ -75,26 +83,27 @@ const GamePage = () => {
                 document.getElementById('correctCard').style.backgroundColor = 'cyan';
                 document.getElementById('correctCard').style.fontWeight = 'normal';                      
                 clearTimeout(myTimeout);
+                const myTimeout2 = setTimeout(myStopFunction2, 4000);
+            
+                function myStopFunction2() {                         
+                    document.getElementById('correctCard').style.backgroundColor = '#abb2bf';
+                    document.getElementById('correctCard').style.fontWeight = 'normal';  
+                    document.getElementById(`card0`).style.backgroundColor = '#abb2bf';
+                    document.getElementById(`card0`).style.fontWeight = 'normal';
+                    document.getElementById(`card1`).style.backgroundColor = '#abb2bf';
+                    document.getElementById(`card1`).style.fontWeight = 'normal';
+                    document.getElementById(`card2`).style.backgroundColor = '#abb2bf';
+                    document.getElementById(`card2`).style.fontWeight = 'normal';                
+                    clearTimeout(myTimeout2);
+                    setCounter(prev => prev + 1) 
+                    if (counter + 1  >= quizLength) {
+                        document.getElementById('over').textContent =  'Thanks For Playing';
+                        document.getElementById('score').style.color = '#FFF'; 
+                    }
+                }   
             }
-            const myTimeout2 = setTimeout(myStopFunction2, 4000);
             
-            function myStopFunction2() {                         
-                document.getElementById('correctCard').style.backgroundColor = '#abb2bf';
-                document.getElementById('correctCard').style.fontWeight = 'normal';  
-                document.getElementById(`card0`).style.backgroundColor = '#abb2bf';
-                document.getElementById(`card0`).style.fontWeight = 'normal';
-                document.getElementById(`card1`).style.backgroundColor = '#abb2bf';
-                document.getElementById(`card1`).style.fontWeight = 'normal';
-                document.getElementById(`card2`).style.backgroundColor = '#abb2bf';
-                document.getElementById(`card2`).style.fontWeight = 'normal';                
-                clearTimeout(myTimeout2);
-                setCounter(prev => prev + 1) 
-                if (counter + 1  >= quizLength) {
-                    document.getElementById('over').textContent =  'Thanks For Playing';
-                    document.getElementById('score').textContent =  `Your Score Was: ${score}`;
-                }
-            }   
-            
+              
         } else {
             const myTimeout3 = setTimeout(myStopFunction3, 5000);
             
@@ -112,11 +121,11 @@ const GamePage = () => {
                 if (counter + 1  >= quizLength) {
                     console.log("done")
                     document.getElementById('over').textContent =  'Thanks For Playing';
-                    document.getElementById('score').textContent =  `Your Score Was: ${score}`;
+                    document.getElementById('score').style.color = '#FFF'; 
                 }
             }                    
         }     
-               
+            
     }   
 
     const quizLength = questions.length;
@@ -124,8 +133,7 @@ const GamePage = () => {
     function renderIncorrectAnswers () {
         let arr = [];
         
-        console.log("quizLength: " , quizLength)
-        let currentQuestion = 0;
+        console.log("quizLength: " , quizLength)        
         for (let index = 0; index < question.incorrect_answers.length; index++) {
             arr.push(   
                     <div id={index} className="card answer-card naked">
