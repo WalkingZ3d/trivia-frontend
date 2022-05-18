@@ -10,6 +10,7 @@ export const getNumOfPlayers = numOfPlayers => {
         };
     };
 };
+
 // Category
 const loadCategory = category => ({ type: 'LOAD_CATEGORY', payload: category });
 export const getCategory = category => {
@@ -22,6 +23,7 @@ export const getCategory = category => {
         };
     };
 };
+
 // Category ID
 const loadCategoryID = categoryID => ({ type: 'LOAD_CATEGORY_ID', payload: categoryID });
 export const getCategoryID = categoryID => {
@@ -34,6 +36,7 @@ export const getCategoryID = categoryID => {
         };
     };
 };
+
 // Num of turns
 const loadNumOfTurns = getNumOfTurns => ({ type: 'LOAD_TURNS', payload: getNumOfTurns });
 export const getNumOfTurns = getNumOfTurns => {
@@ -46,6 +49,7 @@ export const getNumOfTurns = getNumOfTurns => {
         };
     };
 };
+
 // Difficulty
 const loadDifficulty = difficulty => ({ type: 'LOAD_DIFFICULTY', payload: difficulty });
 export const getDifficulty = difficulty => {
@@ -58,6 +62,7 @@ export const getDifficulty = difficulty => {
         };
     };
 };
+
 // Add player1 to the game
 const loadPlayer1 = player1 => ({ type: 'ADD_PLAYER1', payload: player1 });
 export const getPlayer1 = player1 => {
@@ -70,6 +75,7 @@ export const getPlayer1 = player1 => {
         };
     };
 };
+
 // Add player2 to the game
 const loadPlayer2 = player2 => ({ type: 'ADD_PLAYER2', payload: player2 });
 export const getPlayer2 = player2 => {
@@ -82,6 +88,7 @@ export const getPlayer2 = player2 => {
         };
     };
 };
+
 // Add player3 to the game
 const loadPlayer3 = player3 => ({ type: 'ADD_PLAYER3', payload: player3 });
 export const getPlayer3 = player3 => {
@@ -94,26 +101,13 @@ export const getPlayer3 = player3 => {
         };
     };
 };
+
 // Add player4 to the game
 const loadPlayer4 = player4 => ({ type: 'ADD_PLAYER4', payload: player4 });
 export const getPlayer4 = player4 => {
     return async dispatch => {
         try {
             dispatch(loadPlayer4(player4));
-        } catch (err) {
-            console.warn(err.message);
-            dispatch({ type: 'SET_ERROR', payload: err.message })
-        };
-    };
-};
-
-// set score for player 1
-const setScore1 = score => ({ type: 'SET_SCORE', payload: score });
-
-export const getScore1 = score => {
-    return async dispatch => {
-        try {
-            dispatch(setScore1(score));
         } catch (err) {
             console.warn(err.message);
             dispatch({ type: 'SET_ERROR', payload: err.message })

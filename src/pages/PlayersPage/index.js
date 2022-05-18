@@ -64,7 +64,7 @@ const PlayersPage = () => {
         return arr.map((s, i) => <>
                                     <label htmlFor="numPlayers" className='optionsLabel'>Player {s+1}: </label>
 
-                                    <input key={s} type="text" id={`numPlayer${i+1}`} name='numPLayers' className='optionsInp' placeholder={`Enter username of player ${i+1}`} required/>
+                                    <input key={s} type="text" id={`numPlayer${i+1}`} name='numPLayers' className='optionsInp' placeholder={`Enter username of player ${i+1}`} required defaultValue={i+1}/>
 
                                     <br/><br/>
                                 </>)         
