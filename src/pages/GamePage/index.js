@@ -52,56 +52,56 @@ const GamePage = () => {
         setNextPlayer(player2)
     }, [])
 
-    useEffect( () => {
-        async function sendToDB() {
-            console.log("winner sent: ", winner[0])
-            if (sending) {
-                const dataToSend = {
-                    'set_turns': numOfTurns,
-                    'category': category,
-                    'player_number': numOfPlayers,
-                    'winner': winner[0],
-                    'players_list': [
-                                        {
-                                            "name": player1, 
-                                            "points": score1
-                                        },
-                                        {
-                                            "name": player2, 
-                                            "points": score2
-                                        },
-                                        {
-                                            "name": player3, 
-                                            "points": score3
-                                        },
-                                        {
-                                            "name": player4, 
-                                            "points": score4
-                                        }
-                                    ],
-                    'game_info': {
-                        'difficulty': difficulty,
-                        'questions': questions
-                    }
-                }
-                console.log("dataToSend: ", dataToSend)
-                const headers = {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                }
-                const address = 'https://neweet-server.herokuapp.com/records/create'
-                axios({
-                    method: 'post',
-                    headers: headers,
-                    url: address,
-                    data: dataToSend
-                  }).then(function (response) {
-                    console.log("response from api:", response);
-                  });     
-            }        
-        }
-        sendToDB();        
-    }, [sending])
+    // useEffect( () => {
+    //     async function sendToDB() {
+    //         console.log("winner sent: ", winner[0])
+    //         if (sending) {
+    //             const dataToSend = {
+    //                 'set_turns': numOfTurns,
+    //                 'category': category,
+    //                 'player_number': numOfPlayers,
+    //                 'winner': winner[0],
+    //                 'players_list': [
+    //                                     {
+    //                                         "name": player1, 
+    //                                         "points": score1
+    //                                     },
+    //                                     {
+    //                                         "name": player2, 
+    //                                         "points": score2
+    //                                     },
+    //                                     {
+    //                                         "name": player3, 
+    //                                         "points": score3
+    //                                     },
+    //                                     {
+    //                                         "name": player4, 
+    //                                         "points": score4
+    //                                     }
+    //                                 ],
+    //                 'game_info': {
+    //                     'difficulty': difficulty,
+    //                     'questions': questions
+    //                 }
+    //             }
+    //             console.log("dataToSend: ", dataToSend)
+    //             const headers = {
+    //                 'Content-Type': 'application/json',
+    //                 'Access-Control-Allow-Origin': '*'
+    //             }
+    //             const address = 'https://neweet-server.herokuapp.com/records/create'
+    //             axios({
+    //                 method: 'post',
+    //                 headers: headers,
+    //                 url: address,
+    //                 data: dataToSend
+    //               }).then(function (response) {
+    //                 console.log("response from api:", response);
+    //               });     
+    //         }        
+    //     }
+    //     sendToDB();        
+    // }, [sending])
 
     useEffect( () => {
         if (gameState === 'over') {
@@ -206,7 +206,16 @@ const GamePage = () => {
                 winsFinal.push(player4)
             }   
         }
+        if (numOfPlayers == 1) {
+            winsFinal = [];
+            winsFinal.push(player1) 
+        }
         console.log("number of winners:", winsFinal)
+        if (winsFinal.length > 1 && numOfPlayers > 1) {
+            console.log('tiebreaker needed')
+        } else {
+            console.log('not needed')
+        }
         setWinner(winsFinal)
 
         setSending(true);
@@ -339,20 +348,20 @@ const GamePage = () => {
             } else if (i == 1) {
                 arr.push(                       
                     <div className="col-sm">
-                       {player2 + ": " + score2}
+                       <span id='playerScoreName'>{player2 + ": "}</span><span id='playerScoreNum'>{score2}</span>
                     </div>
                    )      
             } else if (i == 2) {
                 arr.push(                       
                     <div className="col-sm">
-                       {player3 + ": " + score3}
+                       <span id='playerScoreName'>{player3 + ": "}</span><span id='playerScoreNum'>{score3}</span>
                     </div>
                    )      
             } else if (i == 3) {
                 arr.push(                       
                     <div className="col-sm">
-                       {player4 + ": " + score4}
-                    </div>
+                    <span id='playerScoreName'>{player4 + ": "}</span><span id='playerScoreNum'>{score4}</span>
+                 </div>
                    )      
             }
             
@@ -405,8 +414,8 @@ const GamePage = () => {
                     </div>
                 </div> 
                 <br/><br/>
-                <div class="container">
-                <div class="card-deck">
+                <div className="container">
+                <div className="card-deck">
                 {question && renderIncorrectAnswers()}
                  
                 </div>
