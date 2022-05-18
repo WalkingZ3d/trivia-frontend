@@ -256,6 +256,7 @@ const GamePage = () => {
                     setScore1(prev => prev + 1)                   
                     clearTimeout(myTimeout);
                 }
+                
             }
             
                                                        
@@ -402,10 +403,24 @@ const GamePage = () => {
         )
     }
 
+    // function renderNextPlayer() {
+    //     return (
+    //         <h3 id='nextH3'>Next Up: <span id='playerInfoB'>{nextPlayer}</span></h3>
+    //     )
+    // }
+
+    
     function renderNextPlayer() {
-        return (
-            <h3 id='nextH3'>Next Up: <span id='playerInfoB'>{nextPlayer}</span></h3>
-        )
+        if (numOfPlayers > 1) {
+           return (
+                <h3 id='nextH3'>Next Up: <span id='playerInfoB'>{nextPlayer}</span></h3>
+            ) 
+        } else {
+            return (
+                <h3 id='nextH3'>Next Up: <span id='playerInfoB'>{player1}</span></h3>
+            ) 
+        }
+        
     }
     
     function playAgain(){
