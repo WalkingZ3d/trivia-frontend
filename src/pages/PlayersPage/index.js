@@ -61,19 +61,19 @@ const PlayersPage = () => {
         for (let i = 0; i < times; i++) {
             arr.push(i);
         }
-        return arr.map((s, i) => <>
+        return arr.map((s, i) => <div key={s}>
                                     <label htmlFor="numPlayers" className='optionsLabel'>Player {s+1}: </label>
 
-                                    <input key={s} type="text" id={`numPlayer${i+1}`} name='numPLayers' className='optionsInp' placeholder={`Enter username of player ${i+1}`} required defaultValue={i+1}/>
+                                    <input type="text" id={`numPlayer${i+1}`} name='numPLayers' className='optionsInp' placeholder={`Enter username of player ${i+1}`} required defaultValue={i+1}/>
 
                                     <br/><br/>
-                                </>)         
+                                </div>)         
     }
        
     return (
         <>
         <div className="jumbotron text-center" id="title">
-        <br/><br/>
+        <br/>
             <h1 id="titleH1">Enter The Players</h1>
             <br/>
         </div>

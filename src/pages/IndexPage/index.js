@@ -19,7 +19,7 @@ const IndexPage = () => {
         <div className="container-fluid justify-content-center text-center">
             <div className="row ">
                 <div className="col-sm-12 ">
-                    <button onClick={handleClick} id='cardBtn'>Play</button>
+                    <button onClick={handleClick} id='cardBtnIndex'>Play</button>
                 </div>
             </div>
         </div>

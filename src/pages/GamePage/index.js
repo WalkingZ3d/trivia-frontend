@@ -1,14 +1,13 @@
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
-import { getScore1} from '../../actions';
+import { useNavigate } from 'react-router-dom';
 
 const GamePage = () => {
 
     const dispatch = useDispatch();
 
-    //const { results } = useParams();
+    const navigate = useNavigate();
 
     const[questions, setQuestions] = useState([]); 
 
@@ -30,6 +29,10 @@ const GamePage = () => {
     const[complete, setComplete] = useState(false);
 
     const[sending, setSending] = useState(false);
+
+    const[scoreChange, setScoreChange] = useState(false)
+
+    const[tiebreaker, setTiebreaker] = useState(false);
     
     const categoryID = useSelector(state => state.categoryID);
     const numOfTurns = useSelector(state => state.numOfTurns);
@@ -53,67 +56,78 @@ const GamePage = () => {
     }, [])
 
     useEffect( () => {
-        async function sendToDB() {
-            console.log("winner sent: ", winner[0])
-            if (sending) {
-                const dataToSend = {
-                    'set_turns': numOfTurns,
-                    'category': category,
-                    'player_number': numOfPlayers,
-                    'winner': winner[0],
-                    'players_list': [
-                                        {
-                                            "name": player1, 
-                                            "points": score1
-                                        },
-                                        {
-                                            "name": player2, 
-                                            "points": score2
-                                        },
-                                        {
-                                            "name": player3, 
-                                            "points": score3
-                                        },
-                                        {
-                                            "name": player4, 
-                                            "points": score4
-                                        }
-                                    ],
-                    'game_info': {
-                        'difficulty': difficulty,
-                        'questions': questions
-                    }
-                }
-                console.log("dataToSend: ", dataToSend)
-                const headers = {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                }
-                const address = 'https://neweet-server.herokuapp.com/records/create'
-                axios({
-                    method: 'post',
-                    headers: headers,
-                    url: address,
-                    data: dataToSend
-                  }).then(function (response) {
-                    console.log("response from api:", response);
-                  });     
-            }        
+        if(scoreChange){
+            updateScore(currentPlayer);
+            setScoreChange(false)
         }
-        sendToDB();        
-    }, [sending])
+    },[scoreChange])
+
+    // useEffect( () => {
+    //     async function sendToDB() {
+    //         console.log("winner sent: ", winner[0])
+    //         if (sending) {
+    //             const dataToSend = {
+    //                 'set_turns': numOfTurns,
+    //                 'category': category,
+    //                 'player_number': numOfPlayers,
+    //                 'winner': winner[0],
+    //                 'players_list': [
+    //                                     {
+    //                                         "name": player1, 
+    //                                         "points": score1
+    //                                     },
+    //                                     {
+    //                                         "name": player2, 
+    //                                         "points": score2
+    //                                     },
+    //                                     {
+    //                                         "name": player3, 
+    //                                         "points": score3
+    //                                     },
+    //                                     {
+    //                                         "name": player4, 
+    //                                         "points": score4
+    //                                     }
+    //                                 ],
+    //                 'game_info': {
+    //                     'difficulty': difficulty,
+    //                     'questions': questions
+    //                 }
+    //             }
+    //             console.log("dataToSend: ", dataToSend)
+    //             const headers = {
+    //                 'Content-Type': 'application/json',
+    //                 'Access-Control-Allow-Origin': '*'
+    //             }
+    //             const address = 'https://neweet-server.herokuapp.com/records/create'
+    //             axios({
+    //                 method: 'post',
+    //                 headers: headers,
+    //                 url: address,
+    //                 data: dataToSend
+    //               }).then(function (response) {
+    //                 console.log("response from api:", response);
+    //               });     
+    //         }        
+    //     }
+    //     sendToDB();        
+    // }, [sending])
 
     useEffect( () => {
+        console.log("i print if winner is changed")
         if (gameState === 'over') {
-            document.getElementById('over').textContent =  'Thanks For Playing';
-            document.getElementById('score').textContent =  `The Winner Is: ${winner[0]}`;
+            document.getElementById('over').textContent =  'Thanks For Playing!!';
+            document.getElementById('winnerNameSpan').textContent = winner[0];
+            document.getElementById('score').textContent = 'The Winner Is: '
             document.getElementById('score').style.color = '#FFF';
-            document.getElementById('lmao').style.color = '#21252b';
-            document.getElementById('lmao2').style.color = '#282c34';
-            document.getElementById('playerInfoT').style.color = '#21252b';
-            document.getElementById('playerInfoB').style.color = '#282c34';
+            document.getElementById('turnH3').style.display = 'none';
+            document.getElementById('nextH3').style.display = 'none';
+            document.getElementById('playerInfoT').style.display = 'none';
+            document.getElementById('playerInfoB').style.display = 'none';
+            document.getElementById('playerNames').style.marginTop= '30px';
+            document.getElementById('againBtn').style.display = 'block';
         }
-    },[gameState, winner])
+    },[winner])
 
     useEffect( () => {
     
@@ -180,8 +194,21 @@ const GamePage = () => {
     
     function determineWinner(){
         let arr = [];
-        arr.push(score1, score2, score3, score4);
-        //console.log("intial array: " , arr)
+        
+        if (score1 === 0 && score2 === 0 && score3 === 0 && score4 === 0 && numOfPlayers > 1){
+            console.log("everyone failed")
+            if (numOfPlayers == 2 ){
+                arr.push(score1, score2);
+            } else if (numOfPlayers == 3){
+                arr.push(score1, score2, score3);
+            } else if (numOfPlayers == 4){
+                arr.push(score1, score2, score3, score4);
+            }
+        } else {
+            arr.push(score1, score2, score3, score4);
+        }
+        
+        // console.log("intial array: " , arr)
         let currentWin = arr[0];
         let winsArrNames = [];
         for (let i = 0; i < arr.length; i++) {
@@ -206,10 +233,26 @@ const GamePage = () => {
                 winsFinal.push(player4)
             }   
         }
-        console.log("number of winners:", winsFinal)
-        setWinner(winsFinal)
 
-        setSending(true);
+        if (numOfPlayers == 1) {
+            winsFinal = [];
+            winsFinal.push(player1) 
+        }
+        
+        console.log("number of winners:", winsFinal.length)
+        console.log("winners array: " , winsFinal)
+        if (winsFinal.length > 1 && numOfPlayers > 1) {
+            setTiebreaker(true)
+            console.log('tiebreaker true')  
+        } else if (numOfPlayers == 1 && score1 === 0){
+            setTiebreaker(true)
+            console.log('tiebreaker true for one player')  
+        }  else {
+            console.log('tiebreaker false') 
+            setWinner(winsFinal)
+            setSending(true);
+        }
+        
     }
 
     const handleClick = (e) => {          
@@ -222,7 +265,24 @@ const GamePage = () => {
             document.getElementById('correctCard').style.fontWeight = 'bold';
             document.getElementById('correct').style.backgroundColor = '#0F0';
             document.getElementById('correct').style.fontWeight = 'bold';
-                updateScore(currentPlayer);                                       
+            if(numOfPlayers > 1){
+                const myTimeout = setTimeout(myStopFunction, 5000);
+            
+                function myStopFunction() {        
+                    updateScore(currentPlayer);                   
+                    clearTimeout(myTimeout);
+                }
+            } else {
+                const myTimeout = setTimeout(myStopFunction, 5000);
+            
+                function myStopFunction() {        
+                    setScore1(prev => prev + 1)                   
+                    clearTimeout(myTimeout);
+                }
+                
+            }
+            
+                                                       
         } else {
             document.getElementById(`card${theID}`).style.backgroundColor = '#F00';
             document.getElementById(`card${theID}`).style.fontWeight = 'bold';          
@@ -339,20 +399,20 @@ const GamePage = () => {
             } else if (i == 1) {
                 arr.push(                       
                     <div className="col-sm">
-                       {player2 + ": " + score2}
+                       <span id='playerScoreName'>{player2 + ": "}</span><span id='playerScoreNum'>{score2}</span>
                     </div>
                    )      
             } else if (i == 2) {
                 arr.push(                       
                     <div className="col-sm">
-                       {player3 + ": " + score3}
+                       <span id='playerScoreName'>{player3 + ": "}</span><span id='playerScoreNum'>{score3}</span>
                     </div>
                    )      
             } else if (i == 3) {
                 arr.push(                       
                     <div className="col-sm">
-                       {player4 + ": " + score4}
-                    </div>
+                    <span id='playerScoreName'>{player4 + ": "}</span><span id='playerScoreNum'>{score4}</span>
+                 </div>
                    )      
             }
             
@@ -362,14 +422,32 @@ const GamePage = () => {
 
     function renderCurrentPlayer() {
         return (
-            <h3 id='lmao'>Your Turn <span id='playerInfoT'>{currentPlayer}</span>!</h3>
+            <h3 id='turnH3'>Your Turn <span id='playerInfoT'>{currentPlayer}</span>!</h3>
         )
     }
-
+    
     function renderNextPlayer() {
-        return (
-            <h3 id='lmao2'>Next Up: <span id='playerInfoB'>{nextPlayer}</span></h3>
-        )
+        if(counter === quizLength - 1) {
+            return (
+                <h3 id='nextH3'><span id='playerInfoB'>This is the Final Question</span></h3>
+            )             
+        } else {
+            if (numOfPlayers > 1) {
+                return (
+                        <h3 id='nextH3'>Next Up: <span id='playerInfoB'>{nextPlayer}</span></h3>
+                    ) 
+                } else {
+                    return (
+                        <h3 id='nextH3'>Next Up: <span id='playerInfoB'>{player1}</span></h3>
+                    ) 
+                }
+        }
+        
+        
+    }
+    
+    function playAgain(){
+        navigate('/')
     }
 
     const regQuotes = /\&quot;|\&ldquo;|\&rdquo;/g;
@@ -389,24 +467,24 @@ const GamePage = () => {
 
     return <>
                 <div className="jumbotron text-center" id="title">
-                <br/><br/>
+               
                     <h1 id="titleH1">The Quiz</h1>
                     <br/><br/>
                     {renderCurrentPlayer()}
-                    <br/>
                 </div>
-                <br></br>
                 
+
                 <div className="container-fluid justify-content-center text-center">
                     <div className="row ">
                         <div className="col-sm-12 ">
-                            {question && <h3>{question.question.replace(regQuotes, '"').replace(regApost, '’').replace(funnyI, 'í').replace(funnyO,'ö').replace(aRing, 'å').replace(funnyA, 'ä').replace(funnyO2, 'ó').replace(softHyphen, '').replace(funnyA2, 'á').replace(funnyE, 'é').replace(andSymb, '&').replace(dots, '...')}</h3>}
+                        <br/>
+                            <span id='questionsSpan'>{question && <h3>{question.question.replace(regQuotes, '"').replace(regApost, '’').replace(funnyI, 'í').replace(funnyO,'ö').replace(aRing, 'å').replace(funnyA, 'ä').replace(funnyO2, 'ó').replace(softHyphen, '').replace(funnyA2, 'á').replace(funnyE, 'é').replace(andSymb, '&').replace(dots, '...')}</h3>}</span>
                         </div>
                     </div>
                 </div> 
                 <br/><br/>
-                <div class="container">
-                <div class="card-deck">
+                <div className="container">
+                <div className="card-deck">
                 {question && renderIncorrectAnswers()}
                  
                 </div>
@@ -419,16 +497,32 @@ const GamePage = () => {
                             </div>
                         </div>
                     </div>
+
+                {/* <div className="container-fluid justify-content-center text-center">
+                    <div className="row ">
+                        <div className="col-sm-12 ">
+                            
+                        </div>
+                    </div>
+                </div> */}
                 
                 <div className="container-fluid justify-content-center text-center">
                     <div className="row row-cols-1">
                             <div className="col-sm-12 ">
                                 <h3 id='over'></h3>
-                                <h3 id='score'></h3>
+                                <br/>
+                                
+                                <div>
+                                    <h3 id='score'></h3>
+                                    <h3 id='winnerNameSpan'></h3>
+                                </div>
+                                <br/>
+                                <button onClick={playAgain} id='againBtn'>Play Again</button>
                             </div>
                         </div>
                     </div>
                 <br></br>
+               
                 <div className="container justify-content-center text-center">
                     <div className="row " id='playerNames'>
                         {renderPlayers(numOfPlayers)}
