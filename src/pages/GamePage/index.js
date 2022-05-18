@@ -402,24 +402,24 @@ const GamePage = () => {
             <h3 id='turnH3'>Your Turn <span id='playerInfoT'>{currentPlayer}</span>!</h3>
         )
     }
-
-    // function renderNextPlayer() {
-    //     return (
-    //         <h3 id='nextH3'>Next Up: <span id='playerInfoB'>{nextPlayer}</span></h3>
-    //     )
-    // }
-
     
     function renderNextPlayer() {
-        if (numOfPlayers > 1) {
-           return (
-                <h3 id='nextH3'>Next Up: <span id='playerInfoB'>{nextPlayer}</span></h3>
-            ) 
-        } else {
+        if(counter === quizLength - 1) {
             return (
-                <h3 id='nextH3'>Next Up: <span id='playerInfoB'>{player1}</span></h3>
-            ) 
+                <h3 id='nextH3'><span id='playerInfoB'>This is the Final Question</span></h3>
+            )             
+        } else {
+            if (numOfPlayers > 1) {
+                return (
+                        <h3 id='nextH3'>Next Up: <span id='playerInfoB'>{nextPlayer}</span></h3>
+                    ) 
+                } else {
+                    return (
+                        <h3 id='nextH3'>Next Up: <span id='playerInfoB'>{player1}</span></h3>
+                    ) 
+                }
         }
+        
         
     }
     
