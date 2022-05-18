@@ -28,13 +28,13 @@ const HighScorePage = () => {
     }, [])
 
     function renderScores() {
-        return highScore.map((s,i) => <div className={'highScores'} key={i}><h3 id='highName'>{s._id}: <span id='highNum'>{s.totWins}</span></h3><br/></div>)
+        return highScore.map((s,i) => <div className={'highScores'} key={i}><h3 id='highName'>{s._id}<br></br><span id='highNum'>{s.totWins}</span></h3><br/></div>)
     }
     
     return (
         <>
         <div className="jumbotron text-center" id="title">
-            <h1 id="titleH1">HIGHSCORES</h1>
+            <h1 id="titleH1">Leaderboard</h1>
             <br/>
         </div>
         <br/>
@@ -44,7 +44,7 @@ const HighScorePage = () => {
                    {renderScores()}
                 </div>
             </div>
-        </div>
+        </div>        
     </>
     )
 }

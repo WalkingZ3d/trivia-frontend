@@ -52,62 +52,66 @@ const GamePage = () => {
         setNextPlayer(player2)
     }, [])
 
-    useEffect( () => {
-        async function sendToDB() {
-            console.log("winner sent: ", winner[0])
-            if (sending) {
-                const dataToSend = {
-                    'set_turns': numOfTurns,
-                    'category': category,
-                    'player_number': numOfPlayers,
-                    'winner': winner[0],
-                    'players_list': [
-                                        {
-                                            "name": player1, 
-                                            "points": score1
-                                        },
-                                        {
-                                            "name": player2, 
-                                            "points": score2
-                                        },
-                                        {
-                                            "name": player3, 
-                                            "points": score3
-                                        },
-                                        {
-                                            "name": player4, 
-                                            "points": score4
-                                        }
-                                    ],
-                    'game_info': {
-                        'difficulty': difficulty,
-                        'questions': questions
-                    }
-                }
-                console.log("dataToSend: ", dataToSend)
-                const headers = {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                }
-                const address = 'https://neweet-server.herokuapp.com/records/create'
-                axios({
-                    method: 'post',
-                    headers: headers,
-                    url: address,
-                    data: dataToSend
-                  }).then(function (response) {
-                    console.log("response from api:", response);
-                  });     
-            }        
-        }
-        sendToDB();        
-    }, [sending])
+    // useEffect( () => {
+    //     async function sendToDB() {
+    //         console.log("winner sent: ", winner[0])
+    //         if (sending) {
+    //             const dataToSend = {
+    //                 'set_turns': numOfTurns,
+    //                 'category': category,
+    //                 'player_number': numOfPlayers,
+    //                 'winner': winner[0],
+    //                 'players_list': [
+    //                                     {
+    //                                         "name": player1, 
+    //                                         "points": score1
+    //                                     },
+    //                                     {
+    //                                         "name": player2, 
+    //                                         "points": score2
+    //                                     },
+    //                                     {
+    //                                         "name": player3, 
+    //                                         "points": score3
+    //                                     },
+    //                                     {
+    //                                         "name": player4, 
+    //                                         "points": score4
+    //                                     }
+    //                                 ],
+    //                 'game_info': {
+    //                     'difficulty': difficulty,
+    //                     'questions': questions
+    //                 }
+    //             }
+    //             console.log("dataToSend: ", dataToSend)
+    //             const headers = {
+    //                 'Content-Type': 'application/json',
+    //                 'Access-Control-Allow-Origin': '*'
+    //             }
+    //             const address = 'https://neweet-server.herokuapp.com/records/create'
+    //             axios({
+    //                 method: 'post',
+    //                 headers: headers,
+    //                 url: address,
+    //                 data: dataToSend
+    //               }).then(function (response) {
+    //                 console.log("response from api:", response);
+    //               });     
+    //         }        
+    //     }
+    //     sendToDB();        
+    // }, [sending])
 
     useEffect( () => {
         if (gameState === 'over') {
             document.getElementById('over').textContent =  'Thanks For Playing';
-            document.getElementById('score').textContent =  `The Winner Is: ${winner}`;
+            document.getElementById('score').textContent =  `The Winner Is: ${winner[0]}`;
             document.getElementById('score').style.color = '#FFF';
+            document.getElementById('lmao').style.color = '#21252b';
+            document.getElementById('lmao2').style.color = '#282c34';
+            document.getElementById('playerInfoT').style.color = '#21252b';
+            document.getElementById('playerInfoB').style.color = '#282c34';
         }
     },[gameState, winner])
 
@@ -182,7 +186,7 @@ const GamePage = () => {
     function determineWinner(){
         let arr = [];
         arr.push(score1, score2, score3, score4);
-        console.log("intial array: " , arr)
+        //console.log("intial array: " , arr)
         let currentWin = arr[0];
         let winsArrNames = [];
         for (let i = 0; i < arr.length; i++) {
@@ -194,7 +198,7 @@ const GamePage = () => {
                 currentWin = arr[i];
             }
         }
-        console.log("winner array of strings: " , winsArrNames)
+        //console.log("winner array of strings: " , winsArrNames)
         let winsFinal = [];
         for (let i = 0; i < winsArrNames.length; i++) {
             if (winsArrNames[i] === 'player1') {
@@ -207,7 +211,7 @@ const GamePage = () => {
                 winsFinal.push(player4)
             }   
         }
-        console.log(winsFinal)
+        console.log("number of winners:", winsFinal.length)
         setWinner(winsFinal)
 
         setSending(true);
@@ -216,7 +220,7 @@ const GamePage = () => {
     const handleClick = (e) => {          
 
         const buttonClicked = e.target.id;
-        console.log("this one being clicked, ", buttonClicked)
+        //console.log("this one being clicked, ", buttonClicked)
         const theID = e.target.id.slice(-1);
         if (buttonClicked === "correctCard" || buttonClicked === "correct") {
             document.getElementById('correctCard').style.backgroundColor = '#0F0';
@@ -334,7 +338,7 @@ const GamePage = () => {
             if (i == 0) {
                 arr.push(                       
                     <div className="col-sm">
-                       {player1 + ": " + score1}
+                       <span id='playerScoreName'>{player1 + ": "}</span><span id='playerScoreNum'>{score1}</span>
                     </div>
                    )           
             } else if (i == 1) {
@@ -363,13 +367,13 @@ const GamePage = () => {
 
     function renderCurrentPlayer() {
         return (
-            <h3 id='lmao'>Your Turn <span id='playerInfo'>{currentPlayer}</span>!</h3>
+            <h3 id='lmao'>Your Turn <span id='playerInfoT'>{currentPlayer}</span>!</h3>
         )
     }
 
     function renderNextPlayer() {
         return (
-            <h3 id='lmao2'>Next Up: <span id='playerInfo'>{nextPlayer}</span></h3>
+            <h3 id='lmao2'>Next Up: <span id='playerInfoB'>{nextPlayer}</span></h3>
         )
     }
 
@@ -392,24 +396,29 @@ const GamePage = () => {
                 <div className="jumbotron text-center" id="title">
                 <br/><br/>
                     <h1 id="titleH1">The Quiz</h1>
-                    <br/>
+                    <br/><br/>
                     {renderCurrentPlayer()}
                     <br/>
                 </div>
                 <br></br>
+                
                 <div className="container-fluid justify-content-center text-center">
                     <div className="row ">
                         <div className="col-sm-12 ">
                             {question && <h3>{question.question.replace(regQuotes, '"').replace(regApost, '’').replace(funnyI, 'í').replace(funnyO,'ö').replace(aRing, 'å').replace(funnyA, 'ä').replace(funnyO2, 'ó').replace(softHyphen, '').replace(funnyA2, 'á').replace(funnyE, 'é').replace(andSymb, '&').replace(dots, '...')}</h3>}
                         </div>
                     </div>
-                </div>
-                <div className="card-deck answers" id='answerDiv'>
-                        {question && renderIncorrectAnswers()}
                 </div> 
-                <br/>
+                <br/><br/>
+                <div class="container">
+                <div class="card-deck">
+                {question && renderIncorrectAnswers()}
+                 
+                </div>
+                </div>
+                <br/><br/><br/>
                 <div className="container-fluid justify-content-center text-center" >
-                    <div className="row ">
+                    <div className="row row-cols-1">
                             <div className="col-sm-12 ">
                                 {renderNextPlayer()}
                             </div>
@@ -417,7 +426,7 @@ const GamePage = () => {
                     </div>
                 
                 <div className="container-fluid justify-content-center text-center">
-                    <div className="row ">
+                    <div className="row row-cols-1">
                             <div className="col-sm-12 ">
                                 <h3 id='over'></h3>
                                 <h3 id='score'></h3>
@@ -429,7 +438,8 @@ const GamePage = () => {
                     <div className="row " id='playerNames'>
                         {renderPlayers(numOfPlayers)}
                     </div>
-                </div>                
+                </div>   
+                <br/><br/>             
             </>
     
 }
