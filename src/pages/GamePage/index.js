@@ -1,14 +1,13 @@
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
-import { getScore1} from '../../actions';
+import { useNavigate } from 'react-router-dom';
 
 const GamePage = () => {
 
     const dispatch = useDispatch();
 
-    //const { results } = useParams();
+    const navigate = useNavigate();
 
     const[questions, setQuestions] = useState([]); 
 
@@ -114,6 +113,7 @@ const GamePage = () => {
             document.getElementById('playerInfoT').style.display = 'none';
             document.getElementById('playerInfoB').style.display = 'none';
             document.getElementById('playerNames').style.marginTop= '30px';
+            document.getElementById('againBtn').style.display = 'block';
         }
     },[gameState, winner])
 
@@ -382,6 +382,10 @@ const GamePage = () => {
             <h3 id='nextH3'>Next Up: <span id='playerInfoB'>{nextPlayer}</span></h3>
         )
     }
+    
+    function playAgain(){
+        navigate('/')
+    }
 
     const regQuotes = /\&quot;|\&ldquo;|\&rdquo;/g;
     const regApost = /\&#039;|\&rsquo;/g;
@@ -400,13 +404,12 @@ const GamePage = () => {
 
     return <>
                 <div className="jumbotron text-center" id="title">
-                <br/><br/>
+               
                     <h1 id="titleH1">The Quiz</h1>
                     <br/><br/>
                     {renderCurrentPlayer()}
-                    <br/>
                 </div>
-                <br/><br/>
+                
 
                 <div className="container-fluid justify-content-center text-center">
                     <div className="row ">
@@ -430,18 +433,32 @@ const GamePage = () => {
                             </div>
                         </div>
                     </div>
+
+                {/* <div className="container-fluid justify-content-center text-center">
+                    <div className="row ">
+                        <div className="col-sm-12 ">
+                            
+                        </div>
+                    </div>
+                </div> */}
                 
                 <div className="container-fluid justify-content-center text-center">
                     <div className="row row-cols-1">
                             <div className="col-sm-12 ">
                                 <h3 id='over'></h3>
                                 <br/>
-                                <h3 id='score'></h3>
-                                <h3 id='winnerNameSpan'></h3>
+                                
+                                <div>
+                                    <h3 id='score'></h3>
+                                    <h3 id='winnerNameSpan'></h3>
+                                </div>
+                                <br/>
+                                <button onClick={playAgain} id='againBtn'>Play Again</button>
                             </div>
                         </div>
                     </div>
                 <br></br>
+               
                 <div className="container justify-content-center text-center">
                     <div className="row " id='playerNames'>
                         {renderPlayers(numOfPlayers)}

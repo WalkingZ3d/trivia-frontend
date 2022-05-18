@@ -73,7 +73,7 @@ const PlayersPage = () => {
     return (
         <>
         <div className="jumbotron text-center" id="title">
-        <br/><br/>
+        <br/>
             <h1 id="titleH1">Enter The Players</h1>
             <br/>
         </div>
