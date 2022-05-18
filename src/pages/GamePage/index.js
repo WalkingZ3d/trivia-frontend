@@ -392,24 +392,29 @@ const GamePage = () => {
                 <div className="jumbotron text-center" id="title">
                 <br/><br/>
                     <h1 id="titleH1">The Quiz</h1>
-                    <br/>
+                    <br/><br/>
                     {renderCurrentPlayer()}
                     <br/>
                 </div>
                 <br></br>
+                
                 <div className="container-fluid justify-content-center text-center">
                     <div className="row ">
                         <div className="col-sm-12 ">
                             {question && <h3>{question.question.replace(regQuotes, '"').replace(regApost, '’').replace(funnyI, 'í').replace(funnyO,'ö').replace(aRing, 'å').replace(funnyA, 'ä').replace(funnyO2, 'ó').replace(softHyphen, '').replace(funnyA2, 'á').replace(funnyE, 'é').replace(andSymb, '&').replace(dots, '...')}</h3>}
                         </div>
                     </div>
-                </div>
-                <div className="card-deck answers" id='answerDiv'>
-                        {question && renderIncorrectAnswers()}
                 </div> 
-                <br/>
+                <br/><br/>
+                <div class="container">
+                <div class="card-deck">
+                {question && renderIncorrectAnswers()}
+                 
+                </div>
+                </div>
+                <br/><br/><br/>
                 <div className="container-fluid justify-content-center text-center" >
-                    <div className="row ">
+                    <div className="row row-cols-1">
                             <div className="col-sm-12 ">
                                 {renderNextPlayer()}
                             </div>
@@ -417,7 +422,7 @@ const GamePage = () => {
                     </div>
                 
                 <div className="container-fluid justify-content-center text-center">
-                    <div className="row ">
+                    <div className="row row-cols-1">
                             <div className="col-sm-12 ">
                                 <h3 id='over'></h3>
                                 <h3 id='score'></h3>

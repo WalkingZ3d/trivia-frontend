@@ -142,8 +142,15 @@
 } */
 
 
+/* #hamburgerButton {
+    background-color: var(--orange-color) !important;
+    z-index: 0;
+    margin-right: 10px
+} */
+
 #hamburgerButton {
     background-color: var(--orange-color) !important;
+    color: white !important;
     z-index: 0;
     margin-right: 10px
 }
