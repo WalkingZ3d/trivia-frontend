@@ -33,7 +33,7 @@
 }
 
 #playerInfoB {
-    color: #fff;
+    color: var(--orange-color);
 }
 
 #navItem {
@@ -54,6 +54,12 @@
       width: 37rem;
     }
 }
+
+#winnerNameSpan { 
+    color: var(--orange-color);
+    display: inline;
+}
+
 
 #navItem:hover {
     color: var(--orange-color) !important;
@@ -76,6 +82,10 @@
     border-radius: 10px;
 }
 
+#nextH3 {
+    color: #fff;
+}
+
 .optionsLabel {
     width: 100%;
     text-align: center;
@@ -86,6 +96,11 @@
 
 #score {
     color: var(--body-color);
+    display: inline;
+}
+
+#questionsSpan {
+    color: #fff;
 }
 
 .optionsInp {

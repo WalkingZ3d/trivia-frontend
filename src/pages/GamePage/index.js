@@ -105,13 +105,15 @@ const GamePage = () => {
 
     useEffect( () => {
         if (gameState === 'over') {
-            document.getElementById('over').textContent =  'Thanks For Playing';
-            document.getElementById('score').textContent =  `The Winner Is: ${winner[0]}`;
+            document.getElementById('over').textContent =  'Thanks For Playing!!';
+            document.getElementById('winnerNameSpan').textContent = winner[0];
+            document.getElementById('score').textContent = 'The Winner Is: '
             document.getElementById('score').style.color = '#FFF';
-            document.getElementById('lmao').style.color = '#21252b';
-            document.getElementById('lmao2').style.color = '#282c34';
-            document.getElementById('playerInfoT').style.color = '#21252b';
-            document.getElementById('playerInfoB').style.color = '#282c34';
+            document.getElementById('turnH3').style.display = 'none';
+            document.getElementById('nextH3').style.display = 'none';
+            document.getElementById('playerInfoT').style.display = 'none';
+            document.getElementById('playerInfoB').style.display = 'none';
+            document.getElementById('playerNames').style.marginTop= '30px';
         }
     },[gameState, winner])
 
@@ -371,13 +373,13 @@ const GamePage = () => {
 
     function renderCurrentPlayer() {
         return (
-            <h3 id='lmao'>Your Turn <span id='playerInfoT'>{currentPlayer}</span>!</h3>
+            <h3 id='turnH3'>Your Turn <span id='playerInfoT'>{currentPlayer}</span>!</h3>
         )
     }
 
     function renderNextPlayer() {
         return (
-            <h3 id='lmao2'>Next Up: <span id='playerInfoB'>{nextPlayer}</span></h3>
+            <h3 id='nextH3'>Next Up: <span id='playerInfoB'>{nextPlayer}</span></h3>
         )
     }
 
@@ -404,12 +406,12 @@ const GamePage = () => {
                     {renderCurrentPlayer()}
                     <br/>
                 </div>
-                <br></br>
-                
+                <br/><br/>
+
                 <div className="container-fluid justify-content-center text-center">
                     <div className="row ">
                         <div className="col-sm-12 ">
-                            {question && <h3>{question.question.replace(regQuotes, '"').replace(regApost, '’').replace(funnyI, 'í').replace(funnyO,'ö').replace(aRing, 'å').replace(funnyA, 'ä').replace(funnyO2, 'ó').replace(softHyphen, '').replace(funnyA2, 'á').replace(funnyE, 'é').replace(andSymb, '&').replace(dots, '...')}</h3>}
+                            <span id='questionsSpan'>{question && <h3>{question.question.replace(regQuotes, '"').replace(regApost, '’').replace(funnyI, 'í').replace(funnyO,'ö').replace(aRing, 'å').replace(funnyA, 'ä').replace(funnyO2, 'ó').replace(softHyphen, '').replace(funnyA2, 'á').replace(funnyE, 'é').replace(andSymb, '&').replace(dots, '...')}</h3>}</span>
                         </div>
                     </div>
                 </div> 
@@ -433,7 +435,9 @@ const GamePage = () => {
                     <div className="row row-cols-1">
                             <div className="col-sm-12 ">
                                 <h3 id='over'></h3>
+                                <br/>
                                 <h3 id='score'></h3>
+                                <h3 id='winnerNameSpan'></h3>
                             </div>
                         </div>
                     </div>
