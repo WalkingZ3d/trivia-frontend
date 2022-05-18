@@ -31,6 +31,8 @@ const GamePage = () => {
     const[sending, setSending] = useState(false);
 
     const[scoreChange, setScoreChange] = useState(false)
+
+    const[tiebreaker, setTiebreaker] = useState(false);
     
     const categoryID = useSelector(state => state.categoryID);
     const numOfTurns = useSelector(state => state.numOfTurns);
@@ -192,8 +194,21 @@ const GamePage = () => {
     
     function determineWinner(){
         let arr = [];
-        arr.push(score1, score2, score3, score4);
-        //console.log("intial array: " , arr)
+        
+        if (score1 === 0 && score2 === 0 && score3 === 0 && score4 === 0 && numOfPlayers > 1){
+            console.log("everyone failed")
+            if (numOfPlayers == 2 ){
+                arr.push(score1, score2);
+            } else if (numOfPlayers == 3){
+                arr.push(score1, score2, score3);
+            } else if (numOfPlayers == 4){
+                arr.push(score1, score2, score3, score4);
+            }
+        } else {
+            arr.push(score1, score2, score3, score4);
+        }
+        
+        // console.log("intial array: " , arr)
         let currentWin = arr[0];
         let winsArrNames = [];
         for (let i = 0; i < arr.length; i++) {
@@ -218,17 +233,22 @@ const GamePage = () => {
                 winsFinal.push(player4)
             }   
         }
+
         if (numOfPlayers == 1) {
             winsFinal = [];
             winsFinal.push(player1) 
         }
-
+        
         console.log("number of winners:", winsFinal.length)
-
+        console.log("winners array: " , winsFinal)
         if (winsFinal.length > 1 && numOfPlayers > 1) {
-            console.log('tiebreaker needed')
-        } else {
-            console.log('tiebreaker not needed')
+            setTiebreaker(true)
+            console.log('tiebreaker true')  
+        } else if (numOfPlayers == 1 && score1 === 0){
+            setTiebreaker(true)
+            console.log('tiebreaker true for one player')  
+        }  else {
+            console.log('tiebreaker false') 
             setWinner(winsFinal)
             setSending(true);
         }
