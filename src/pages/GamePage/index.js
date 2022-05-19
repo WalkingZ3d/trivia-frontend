@@ -11,6 +11,8 @@ const GamePage = () => {
 
     const[questions, setQuestions] = useState([]); 
 
+    const[suddenDeathQuestion, setSuddenDeathQuestion] = useState([]); 
+
     const[counter, setCounter] = useState(0);
 
     const[score1, setScore1] = useState(0);
@@ -33,6 +35,8 @@ const GamePage = () => {
     const[scoreChange, setScoreChange] = useState(false)
 
     const[tiebreaker, setTiebreaker] = useState(false);
+
+    const[tiebreakerPlayers, setTiebreakerPlayers] = useState([])
     
     const categoryID = useSelector(state => state.categoryID);
     const numOfTurns = useSelector(state => state.numOfTurns);
@@ -61,6 +65,27 @@ const GamePage = () => {
             setScoreChange(false)
         }
     },[scoreChange])
+
+    useEffect( () => {
+        if(tiebreaker){
+            console.log("made it to tiebreaker useEffect")
+            console.log("the players at this stage:" , tiebreakerPlayers)
+            async function getQuestions () {
+
+                try {
+                    const result = await axios.get(`https://opentdb.com/api.php?amount=1&category=${categoryID}&difficulty=${difficulty.toLowerCase()}&type=multiple`);
+                    setSuddenDeathQuestion(result.data.results)                         
+                } catch(err) {
+                    console.error(err);
+                }       
+            }
+            getQuestions();
+        }
+    },[tiebreaker])
+
+    useEffect( () => {
+        console.log("suddenDeathQuesion: ", suddenDeathQuestion)
+    }, [suddenDeathQuestion])
 
     // useEffect( () => {
     //     async function sendToDB() {
@@ -238,15 +263,17 @@ const GamePage = () => {
             winsFinal = [];
             winsFinal.push(player1) 
         }
-        
+
         console.log("number of winners:", winsFinal.length)
         console.log("winners array: " , winsFinal)
         if (winsFinal.length > 1 && numOfPlayers > 1) {
             setTiebreaker(true)
-            console.log('tiebreaker true')  
+            console.log('tiebreaker true') 
+            setTiebreakerPlayers(winsFinal);
         } else if (numOfPlayers == 1 && score1 === 0){
             setTiebreaker(true)
             console.log('tiebreaker true for one player')  
+            setTiebreakerPlayers(winsFinal);
         }  else {
             console.log('tiebreaker false') 
             setWinner(winsFinal)
