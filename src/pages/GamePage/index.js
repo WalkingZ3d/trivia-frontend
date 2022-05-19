@@ -83,8 +83,11 @@ const GamePage = () => {
         }
     },[tiebreaker])
 
-    useEffect( () => {
-        console.log("suddenDeathQuesion: ", suddenDeathQuestion)
+    useEffect( () => {        
+        const questionDeath = suddenDeathQuestion[0]
+        if(questionDeath){
+            console.log("suddenDeathQuesion: ", questionDeath.question)
+        }        
     }, [suddenDeathQuestion])
 
     // useEffect( () => {
