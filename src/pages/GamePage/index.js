@@ -70,22 +70,32 @@ const GamePage = () => {
         if(tiebreaker){
             console.log("made it to tiebreaker useEffect")
             console.log("the players at this stage:" , tiebreakerPlayers)
-            async function getQuestions () {
-
-                try {
-                    const result = await axios.get(`https://opentdb.com/api.php?amount=1&category=${categoryID}&difficulty=${difficulty.toLowerCase()}&type=multiple`);
-                    setSuddenDeathQuestion(result.data.results)                         
-                } catch(err) {
-                    console.error(err);
-                }       
-            }
-            getQuestions();
+            
+            SuddenDeathQuestion();
         }
     },[tiebreaker])
 
-    useEffect( () => {        
+    async function SuddenDeathQuestion () {
+
+        try {
+            const result = await axios.get(`https://opentdb.com/api.php?amount=1&category=${categoryID}&difficulty=${difficulty.toLowerCase()}&type=multiple`);
+            setSuddenDeathQuestion(result.data.results)                         
+        } catch(err) {
+            console.error(err);
+        }       
+    }
+
+    useEffect( () => {            
         const questionDeath = suddenDeathQuestion[0]
         if(questionDeath){
+            for (let i = 0; i < questions.length; i++) {
+                if(questionDeath.question == questions[i].question){
+                    SuddenDeathQuestion()
+                    break;
+                } else{
+                     console.log('list of original questions:' , questions[i].question); 
+                }            
+            } 
             console.log("suddenDeathQuesion: ", questionDeath.question)
         }        
     }, [suddenDeathQuestion])
