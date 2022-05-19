@@ -3,9 +3,7 @@ import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-const GamePage = () => {
-
-    const dispatch = useDispatch();
+const SuddenDeathQuestion = () => {
 
     const navigate = useNavigate();
 
@@ -97,11 +95,13 @@ const GamePage = () => {
                 }            
             } 
             console.log("suddenDeathQuesion: ", questionDeath.question)
-            renderSuddenDeath(questionDeath)            
-            document.getElementById('questionsSpan').textContent = questionDeath.question;
-            document.getElementById('questionsSpan').style.color = '#f00';
-            document.getElementById('questionsSpan').style.fontSize = '22pt';
-            
+            document.getElementById('turnH3').style.display = 'none';
+            document.getElementById('nextH3').textContent = 'Sudden Death Incoming!';
+            const myTimeout = setTimeout(myStopFunction, 2000);            
+            function myStopFunction() {   
+                navigate('/options/players/game/suddendeath')                  
+                clearTimeout(myTimeout);
+            }            
         }        
     }, [suddenDeathQuestion])
 
@@ -186,10 +186,6 @@ const GamePage = () => {
         getQuestions();
     
     }, [])
-
-    function renderSuddenDeath(inp) {
-        console.log(inp)
-    }
     
     const question = questions[counter]
 
@@ -420,7 +416,7 @@ const GamePage = () => {
 
     const quizLength = questions.length;
 
-    function renderIncorrectAnswers (question) {
+    function renderIncorrectAnswers () {
         let arr = [];
               
         for (let index = 0; index < question.incorrect_answers.length; index++) {
@@ -538,8 +534,6 @@ const GamePage = () => {
     const softHyphen = /\&shy;|\&lrm;/g;
     const andSymb = /\&amp;/g;
     const dots = /\&hellip;/g
-    // const p = "Bogot&aacute;"
-    // console.log(p.replace(funnyA2, 'á'))
 
     return <>
                 <div className="jumbotron text-center" id="title">
@@ -561,7 +555,7 @@ const GamePage = () => {
                 <br/><br/>
                 <div className="container">
                 <div className="card-deck">
-                {question && renderIncorrectAnswers(question)}
+                {question && renderIncorrectAnswers()}
                  
                 </div>
                 </div>
@@ -609,4 +603,4 @@ const GamePage = () => {
     
 }
 
-export default GamePage;
+export default SuddenDeathQuestion;
