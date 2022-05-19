@@ -70,22 +70,32 @@ const GamePage = () => {
         if(tiebreaker){
             console.log("made it to tiebreaker useEffect")
             console.log("the players at this stage:" , tiebreakerPlayers)
-            async function getQuestions () {
-
-                try {
-                    const result = await axios.get(`https://opentdb.com/api.php?amount=1&category=${categoryID}&difficulty=${difficulty.toLowerCase()}&type=multiple`);
-                    setSuddenDeathQuestion(result.data.results)                         
-                } catch(err) {
-                    console.error(err);
-                }       
-            }
-            getQuestions();
+            
+            SuddenDeathQuestion();
         }
     },[tiebreaker])
 
-    useEffect( () => {        
+    async function SuddenDeathQuestion () {
+
+        try {
+            const result = await axios.get(`https://opentdb.com/api.php?amount=1&category=${categoryID}&difficulty=${difficulty.toLowerCase()}&type=multiple`);
+            setSuddenDeathQuestion(result.data.results)                         
+        } catch(err) {
+            console.error(err);
+        }       
+    }
+
+    useEffect( () => {            
         const questionDeath = suddenDeathQuestion[0]
         if(questionDeath){
+            for (let i = 0; i < questions.length; i++) {
+                if(questionDeath.question == questions[i].question){
+                    SuddenDeathQuestion()
+                    break;
+                } else{
+                     console.log('list of original questions:' , questions[i].question); 
+                }            
+            } 
             console.log("suddenDeathQuesion: ", questionDeath.question)
         }        
     }, [suddenDeathQuestion])
@@ -285,6 +295,28 @@ const GamePage = () => {
         
     }
 
+    function disableButtons(){
+        document.getElementById('correctCard').disabled = true;
+        document.getElementById(`card0`).disabled = true;
+        document.getElementById(`card1`).disabled = true;
+        document.getElementById(`card2`).disabled = true;
+        document.getElementById('correct').style.pointerEvents = 'none';
+        document.getElementById(`0`).style.pointerEvents = 'none';
+        document.getElementById(`1`).style.pointerEvents = 'none';
+        document.getElementById(`2`).style.pointerEvents = 'none';
+    }
+
+    function enableButtons(){
+        document.getElementById('correctCard').disabled = false;
+        document.getElementById(`card0`).disabled = false;
+        document.getElementById(`card1`).disabled = false;
+        document.getElementById(`card2`).disabled = false;
+        document.getElementById('correct').style.pointerEvents = 'auto';
+        document.getElementById(`0`).style.pointerEvents = 'auto';
+        document.getElementById(`1`).style.pointerEvents = 'auto';
+        document.getElementById(`2`).style.pointerEvents = 'auto';
+    }
+
     const handleClick = (e) => {          
 
         const buttonClicked = e.target.id;
@@ -295,6 +327,8 @@ const GamePage = () => {
             document.getElementById('correctCard').style.fontWeight = 'bold';
             document.getElementById('correct').style.backgroundColor = '#0F0';
             document.getElementById('correct').style.fontWeight = 'bold';
+            disableButtons();
+            
             if(numOfPlayers > 1){
                 const myTimeout = setTimeout(myStopFunction, 5000);
             
@@ -315,7 +349,8 @@ const GamePage = () => {
                                                        
         } else {
             document.getElementById(`card${theID}`).style.backgroundColor = '#F00';
-            document.getElementById(`card${theID}`).style.fontWeight = 'bold';          
+            document.getElementById(`card${theID}`).style.fontWeight = 'bold';
+            disableButtons();          
         }
        
 
@@ -338,7 +373,8 @@ const GamePage = () => {
                 document.getElementById(`card1`).style.fontWeight = 'normal';
                 document.getElementById(`card2`).style.backgroundColor = '#abb2bf';
                 document.getElementById(`card2`).style.fontWeight = 'normal'; 
-                incrementPlayers()               
+                incrementPlayers() 
+                enableButtons();              
                 clearTimeout(myTimeout2);
                 setCounter(prev => prev + 1) 
                 if (counter + 1  >= quizLength) {
@@ -360,7 +396,8 @@ const GamePage = () => {
                 document.getElementById(`card1`).style.fontWeight = 'normal';
                 document.getElementById(`card2`).style.backgroundColor = '#abb2bf';
                 document.getElementById(`card2`).style.fontWeight = 'normal';
-                incrementPlayers()                
+                incrementPlayers()     
+                enableButtons();           
                 clearTimeout(myTimeout3);
                 setCounter(prev => prev + 1)
                 if (counter + 1  >= quizLength) {
