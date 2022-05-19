@@ -59,6 +59,39 @@
     }
 }
 
+#infoLi {
+    font-size: 17px;
+    
+}
+
+#infoLiSpan {
+    color: var(--orange-color);
+}
+
+#infoLiSpanRed {
+    color: #f00;
+}
+
+#infoLiSpanCyan {
+    color: cyan;
+}
+
+
+#playLink {
+    text-decoration: none;
+    color: var(--orange-color);
+}
+
+#playLink:hover {
+    text-decoration: underline;
+    color: #fff;
+    text-decoration-color: var(--orange-color);
+}
+
+#aboutInfo {
+    color: #fff;
+}
+
 #winnerNameSpan { 
     color: var(--orange-color);
     display: inline;

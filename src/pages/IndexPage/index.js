@@ -13,9 +13,7 @@ const IndexPage = () => {
         <>
         <div className="jumbotron text-center" id="title">
             <h1 id="titleH1">Trivia Quiz</h1>
-            <br/>
         </div>
-        <br/>
         <div className="container-fluid justify-content-center text-center">
             <div className="row ">
                 <div className="col-sm-12 ">
