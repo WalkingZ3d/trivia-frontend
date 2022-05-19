@@ -5,3 +5,4 @@ export { default as OptionsPage } from './OptionsPage';
 export { default as PlayersPage } from './PlayersPage';
 export { default as GamePage } from './GamePage';
 export { default as HighScorePage } from './HighScorePage';
+export { default as SuddenDeathPage } from './SuddenDeathPage';
