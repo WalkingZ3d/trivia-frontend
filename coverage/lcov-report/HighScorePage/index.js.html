@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">47.36% </span>
+                <span class="strong">94.44% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>9/19</span>
+                <span class='fraction'>17/18</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.66% </span>
+                <span class="strong">83.33% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>4/6</span>
+                <span class='fraction'>5/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">56.25% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>9/16</span>
+                <span class='fraction'>15/15</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -119,35 +119,35 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -177,16 +177,16 @@ const HighScorePage = () =&gt; {
 &nbsp;
             try {
                 const {data} = await axios.get(`https://neweet-server.herokuapp.com/records/winners`);
-                let arr = <span class="cstat-no" title="statement not covered" >[];</span>
-<span class="cstat-no" title="statement not covered" >                for (let i = <span class="cstat-no" title="statement not covered" >0;</span> i &lt; data.length; i++) {</span>
-<span class="cstat-no" title="statement not covered" >                    arr.push(data[i]);</span>
+                let arr = [];
+                for (let i = 0; i &lt; data.length; i++) {
+                    arr.push(data[i]);
                 }
-<span class="cstat-no" title="statement not covered" >                console.log("pre sort: ", arr)</span>
-<span class="cstat-no" title="statement not covered" >                arr.sort(<span class="fstat-no" title="function not covered" >(f</span>irstItem, secondItem) =&gt; <span class="cstat-no" title="statement not covered" >secondItem.totWins - firstItem.totWins)</span>;</span>
-<span class="cstat-no" title="statement not covered" >                console.log("post sort: ", arr)</span>
-<span class="cstat-no" title="statement not covered" >                setHighScore(arr);            </span>
+                console.log("pre sort: ", arr)
+                arr.sort(<span class="fstat-no" title="function not covered" >(f</span>irstItem, secondItem) =&gt; <span class="cstat-no" title="statement not covered" >secondItem.totWins - firstItem.totWins)</span>;
+                console.log("post sort: ", arr)
+                setHighScore(arr);            
             } catch(err) {
-                console.error(err);
+                //console.error(err);
             }
        
         }
@@ -195,7 +195,7 @@ const HighScorePage = () =&gt; {
     }, [])
 &nbsp;
     function renderScores() {
-        return highScore.map(<span class="fstat-no" title="function not covered" >(s</span>,i) =&gt; <span class="cstat-no" title="statement not covered" >&lt;div data-testid='loading' className={'highScores'} key={i}&gt;&lt;h3 id='highName'&gt;{s._id}&lt;br&gt;&lt;/br&gt;&lt;span id='highNum'&gt;{s.totWins}&lt;/span&gt;&lt;/h3&gt;&lt;br/&gt;&lt;/div&gt;)</span>
+        return highScore.map((s,i) =&gt; &lt;div data-testid='loading' className={'highScores'} key={i}&gt;&lt;p id='highName'&gt;{s._id}&lt;br&gt;&lt;/br&gt;&lt;span id='highNum'&gt;{s.totWins}&lt;/span&gt;&lt;/p&gt;&lt;br/&gt;&lt;/div&gt;)
     }
     
     return (
@@ -223,7 +223,7 @@ export default HighScorePage;</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at Thu May 19 2022 16:26:25 GMT+0100 (British Summer Time)
+                at Thu May 19 2022 17:50:23 GMT+0100 (British Summer Time)
             </div>
         <script src="../prettify.js"></script>
         <script>

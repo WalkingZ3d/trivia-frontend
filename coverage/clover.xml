@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1652973985608" clover="3.2.0">
-  <project timestamp="1652973985608" name="All files">
-    <metrics statements="26" coveredstatements="19" conditionals="0" coveredconditionals="0" methods="11" coveredmethods="9" elements="37" coveredelements="28" complexity="0" loc="26" ncloc="26" packages="4" files="4" classes="4"/>
+<coverage generated="1652979023508" clover="3.2.0">
+  <project timestamp="1652979023508" name="All files">
+    <metrics statements="25" coveredstatements="25" conditionals="0" coveredconditionals="0" methods="11" coveredmethods="10" elements="36" coveredelements="35" complexity="0" loc="25" ncloc="25" packages="4" files="4" classes="4"/>
     <package name="AboutPage">
       <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
       <file name="index.js" path="C:\Users\danie\Documents\futureproof\throwaway\babel\trivia-frontend\src\pages\AboutPage\index.js">
@@ -11,25 +11,24 @@
       </file>
     </package>
     <package name="HighScorePage">
-      <metrics statements="16" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="4"/>
+      <metrics statements="15" coveredstatements="15" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="5"/>
       <file name="index.js" path="C:\Users\danie\Documents\futureproof\throwaway\babel\trivia-frontend\src\pages\HighScorePage\index.js">
-        <metrics statements="16" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="4"/>
+        <metrics statements="15" coveredstatements="15" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="5"/>
         <line num="4" count="1" type="stmt"/>
-        <line num="6" count="1" type="stmt"/>
-        <line num="8" count="1" type="stmt"/>
-        <line num="11" count="1" type="stmt"/>
-        <line num="12" count="1" type="stmt"/>
-        <line num="13" count="0" type="stmt"/>
-        <line num="14" count="0" type="stmt"/>
-        <line num="15" count="0" type="stmt"/>
-        <line num="17" count="0" type="stmt"/>
-        <line num="18" count="0" type="stmt"/>
-        <line num="19" count="0" type="stmt"/>
-        <line num="20" count="0" type="stmt"/>
-        <line num="22" count="1" type="stmt"/>
-        <line num="26" count="1" type="stmt"/>
-        <line num="31" count="1" type="stmt"/>
-        <line num="34" count="1" type="stmt"/>
+        <line num="6" count="7" type="stmt"/>
+        <line num="8" count="6" type="stmt"/>
+        <line num="11" count="3" type="stmt"/>
+        <line num="12" count="3" type="stmt"/>
+        <line num="13" count="3" type="stmt"/>
+        <line num="14" count="3" type="stmt"/>
+        <line num="15" count="3" type="stmt"/>
+        <line num="17" count="3" type="stmt"/>
+        <line num="18" count="3" type="stmt"/>
+        <line num="19" count="3" type="stmt"/>
+        <line num="20" count="3" type="stmt"/>
+        <line num="26" count="3" type="stmt"/>
+        <line num="31" count="6" type="stmt"/>
+        <line num="34" count="6" type="stmt"/>
       </file>
     </package>
     <package name="IndexPage">
