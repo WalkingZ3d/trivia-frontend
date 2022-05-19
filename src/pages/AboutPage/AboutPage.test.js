@@ -35,5 +35,9 @@ describe('About', () => {
         expect(span).toHaveStyle({color: 'cyan'});
     });
     
+    test('link takes you to home page', () => {
+        const link = document.getElementById('playLink');
+        expect(link).toHaveAttribute('href', '/')
+    })
 
 });
