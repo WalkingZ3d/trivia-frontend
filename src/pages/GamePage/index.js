@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import * as ReactDOM from 'react-dom';
 
 const GamePage = () => {
 
@@ -15,6 +16,8 @@ const GamePage = () => {
 
     const[counter, setCounter] = useState(0);
 
+    const[suddenCounter, setSuddenCounter] = useState(0);
+
     const[score1, setScore1] = useState(0);
     const[score2, setScore2] = useState(0);
     const[score3, setScore3] = useState(0);
@@ -24,7 +27,11 @@ const GamePage = () => {
 
     const[currentPlayer, setCurrentPlayer] = useState();
 
+    const[currentSuddenPlayer, setCurrentSuddenPlayer] = useState();
+
     const[nextPlayer, setNextPlayer] = useState();
+
+    const[nextSuddenPlayer, setNextSuddenPlayer] = useState();
 
     const[winner, setWinner] = useState([]);
 
@@ -37,6 +44,8 @@ const GamePage = () => {
     const[tiebreaker, setTiebreaker] = useState(false);
 
     const[tiebreakerPlayers, setTiebreakerPlayers] = useState([])
+
+    const[numOfSuddenPlayers, setNumOfSuddenPlayers] = useState(0);
     
     const categoryID = useSelector(state => state.categoryID);
     const numOfTurns = useSelector(state => state.numOfTurns);
@@ -59,49 +68,56 @@ const GamePage = () => {
         setNextPlayer(player2)
     }, [])
 
-    useEffect( () => {
-        if(scoreChange){
-            updateScore(currentPlayer);
-            setScoreChange(false)
-        }
-    },[scoreChange])
+
+    // useEffect( () => {
+    //     if(scoreChange){
+    //         updateScore(currentPlayer);
+    //         setScoreChange(false)
+    //     }
+    // },[scoreChange])
 
     useEffect( () => {
         if(tiebreaker){
             console.log("made it to tiebreaker useEffect")
-            console.log("the players at this stage:" , tiebreakerPlayers)
-            
+            console.log("the players at this stage:" , tiebreakerPlayers.length)
+            setCurrentSuddenPlayer(tiebreakerPlayers[0])
             SuddenDeathQuestion();
         }
     },[tiebreaker])
 
     async function SuddenDeathQuestion () {
-
+        console.log("number of players at this stage:" , tiebreakerPlayers.length)
         try {
-            const result = await axios.get(`https://opentdb.com/api.php?amount=1&category=${categoryID}&difficulty=${difficulty.toLowerCase()}&type=multiple`);
-            setSuddenDeathQuestion(result.data.results)                         
+            const result = await axios.get(`https://opentdb.com/api.php?amount=${tiebreakerPlayers.length}&category=${categoryID}&difficulty=${difficulty.toLowerCase()}&type=multiple`);
+            setSuddenDeathQuestion(result.data.results)
+            setNumOfSuddenPlayers(tiebreakerPlayers.length)                                    
         } catch(err) {
             console.error(err);
         }       
     }
 
-    useEffect( () => {            
-        const questionDeath = suddenDeathQuestion[0]
+    // useEffect(() => {
+    //     if(questionDeath){
+    //         document.getElementById('questionsSpan').textContent = questionDeath.question;
+    //     }
+    // },[suddenCounter])
+
+const questionDeath = suddenDeathQuestion[suddenCounter]
+
+    useEffect( () => {              
         if(questionDeath){
             for (let i = 0; i < questions.length; i++) {
                 if(questionDeath.question == questions[i].question){
                     SuddenDeathQuestion()
                     break;
                 } else{
-                     console.log('list of original questions:' , questions[i].question); 
                 }            
             } 
             console.log("suddenDeathQuesion: ", questionDeath.question)
-            renderSuddenDeath(questionDeath)            
-            document.getElementById('questionsSpan').textContent = questionDeath.question;
-            document.getElementById('questionsSpan').style.color = '#f00';
-            document.getElementById('questionsSpan').style.fontSize = '22pt';
-            
+            console.log("result of sudden death call:", suddenDeathQuestion) 
+            // const newQ = renderIncorrectAnswersTiebreaker(questionDeath);
+            // React.createElement('div', {className: 'card-deck'}, newQ);
+            // ReactDOM.render(newQ, document.getElementById('suddenCards'));
         }        
     }, [suddenDeathQuestion])
 
@@ -157,8 +173,9 @@ const GamePage = () => {
     // }, [sending])
 
     useEffect( () => {
-        console.log("i print if winner is changed")
+        
         if (gameState === 'over') {
+            console.log("i print if winner is changed")
             document.getElementById('over').textContent =  'Thanks For Playing!!';
             document.getElementById('winnerNameSpan').textContent = winner[0];
             document.getElementById('score').textContent = 'The Winner Is: '
@@ -187,9 +204,6 @@ const GamePage = () => {
     
     }, [])
 
-    function renderSuddenDeath(inp) {
-        console.log(inp)
-    }
     
     const question = questions[counter]
 
@@ -225,17 +239,105 @@ const GamePage = () => {
         }
         setCurrentPlayer(nextPlayer)
     }
+
+    function incrementPlayersTiebreaker(){  
+        console.log("within increment current player", currentSuddenPlayer)      
+        console.log("within increment players in tie", tiebreakerPlayers)
+        console.log("within increment next player", nextSuddenPlayer)
+
+        if (tiebreakerPlayers[0] == player1 && tiebreakerPlayers[1] == player3){
+            if (currentSuddenPlayer == player1) {
+                console.log("next is player3")
+                setNextPlayer(player3)
+            } else if (currentSuddenPlayer == player3) {
+                console.log("next is player1")
+            }
+        }
+
+        if (numOfSuddenPlayers === 1) {
+            setNextSuddenPlayer(player1)
+        } else if (numOfSuddenPlayers === 2) {
+            
+            if (tiebreakerPlayers[0] == player1 && tiebreakerPlayers[1] == player2){
+                if (currentSuddenPlayer == player1) {
+                    setNextSuddenPlayer(player2)
+                } else if (currentSuddenPlayer == player2) {
+                    setNextSuddenPlayer(player1)
+                }
+            } else if (tiebreakerPlayers[0] == player1 && tiebreakerPlayers[2] == player3){
+                if (currentSuddenPlayer == player1) {
+                    setNextSuddenPlayer(player3)
+                } else if (currentSuddenPlayer == player3) {
+                    setNextSuddenPlayer(player1)
+                }
+            } else if (tiebreakerPlayers[0] == player1 && tiebreakerPlayers[2] == player4){
+                if (currentSuddenPlayer == player1) {
+                    setNextSuddenPlayer(player4)
+                } else if (currentSuddenPlayer == player4) {
+                    setNextSuddenPlayer(player1)
+                }
+            } else if (tiebreakerPlayers[0] == player2 && tiebreakerPlayers[2] == player3){
+                if (currentSuddenPlayer == player2) {
+                    setNextSuddenPlayer(player3)
+                } else if (currentSuddenPlayer == player3) {
+                    setNextSuddenPlayer(player2)
+                }
+            } else if (tiebreakerPlayers[0] == player2 && tiebreakerPlayers[2] == player4){
+                if (currentSuddenPlayer == player2) {
+                    setNextSuddenPlayer(player4)
+                } else if (currentSuddenPlayer == player4) {
+                    setNextSuddenPlayer(player2)
+                }
+            } else if (tiebreakerPlayers[0] == player3 && tiebreakerPlayers[2] == player4){
+                if (currentSuddenPlayer == player3) {
+                    setNextSuddenPlayer(player4)
+                } else if (currentSuddenPlayer == player4) {
+                    setNextSuddenPlayer(player3)
+                }
+            }
+
+
+
+        //     if (nextPlayer === player2) {
+        //         setNextPlayer(player1)
+        //     } else if (nextPlayer === player1) {
+        //         setNextPlayer(player2)
+        //     }                         
+        // } else if( numOfSuddenPlayers === 3){
+        //     if (nextPlayer === player2) {
+        //         setNextPlayer(player1)
+        //     } else if (nextPlayer === player1) {
+        //         setNextPlayer(player2)
+        //     }  
+        }
+        
+        setCurrentSuddenPlayer(nextPlayer)
+    }
     
     function updateScore(player){
-        if (player === player1) {
-            setScore1(prev => prev + 1)
-        } else if (player === player2) {
-            setScore2(prev => prev + 1)
-        } else if (player === player3) {
-            setScore3(prev => prev + 1)
-        } else if (player === player4) {
-            setScore4(prev => prev + 1)
+        if (tiebreaker) {
+            if (currentSuddenPlayer == player1) {
+                setScore1(prev => prev + 1)
+            } else if (currentSuddenPlayer == player2) {
+                setScore2(prev => prev + 1)
+            } else if (currentSuddenPlayer == player3) {
+                setScore3(prev => prev + 1)
+            } else if (currentSuddenPlayer == player4) {
+                setScore4(prev => prev + 1)
+            }
+            
+        } else {
+            if (player === player1) {
+                setScore1(prev => prev + 1)
+            } else if (player === player2) {
+                setScore2(prev => prev + 1)
+            } else if (player === player3) {
+                setScore3(prev => prev + 1)
+            } else if (player === player4) {
+                setScore4(prev => prev + 1)
+            }  
         }
+        
     }     
 
     
@@ -384,7 +486,7 @@ const GamePage = () => {
                 document.getElementById(`card2`).style.fontWeight = 'normal'; 
                 incrementPlayers() 
                 enableButtons();              
-                clearTimeout(myTimeout2);
+                clearTimeout(myTimeout2);                 
                 setCounter(prev => prev + 1) 
                 if (counter + 1  >= quizLength) {
                     setGameState('over')
@@ -408,8 +510,103 @@ const GamePage = () => {
                 incrementPlayers()     
                 enableButtons();           
                 clearTimeout(myTimeout3);
-                setCounter(prev => prev + 1)
+                setCounter(prev => prev + 1) 
                 if (counter + 1  >= quizLength) {
+                    setGameState('over')
+                    setComplete(true);                     
+                }
+            }                    
+        }     
+            
+    }  
+    
+    const handleClickTiebreaker = (e) => {          
+
+        const buttonClicked = e.target.id;
+        //console.log("this one being clicked, ", buttonClicked)
+        const theID = e.target.id.slice(-1);
+        if (buttonClicked === "correctCard" || buttonClicked === "correct") {
+            document.getElementById('correctCard').style.backgroundColor = '#0F0';
+            document.getElementById('correctCard').style.fontWeight = 'bold';
+            document.getElementById('correct').style.backgroundColor = '#0F0';
+            document.getElementById('correct').style.fontWeight = 'bold';
+            disableButtons();
+            
+            if(numOfSuddenPlayers > 1){
+                const myTimeout = setTimeout(myStopFunction, 5000);
+            
+                function myStopFunction() {        
+                    console.log('current sudden death player count:', numOfSuddenPlayers)
+                    console.log('current sudden death player:', currentSuddenPlayer)
+                    updateScore(currentPlayer);                   
+                    clearTimeout(myTimeout);
+                }
+            } else {
+                const myTimeout = setTimeout(myStopFunction, 5000);
+            
+                function myStopFunction() {        
+                    setScore1(prev => prev + 1)      
+                    console.log('this is not supposed to print')             
+                    clearTimeout(myTimeout);
+                }
+                
+            }
+            
+                                                       
+        } else {
+            document.getElementById(`card${theID}`).style.backgroundColor = '#F00';
+            document.getElementById(`card${theID}`).style.fontWeight = 'bold';
+            disableButtons();          
+        }
+       
+
+        if (theID == '0' || theID == '1' || theID == '2') {
+            const myTimeout = setTimeout(myStopFunction, 1000);
+            
+            function myStopFunction() {        
+                document.getElementById('correctCard').style.backgroundColor = 'cyan';
+                document.getElementById('correctCard').style.fontWeight = 'normal';                      
+                clearTimeout(myTimeout);
+            }
+            const myTimeout2 = setTimeout(myStopFunction2, 4000);
+        
+            function myStopFunction2() {                         
+                document.getElementById('correctCard').style.backgroundColor = '#abb2bf';
+                document.getElementById('correctCard').style.fontWeight = 'normal';  
+                document.getElementById(`card0`).style.backgroundColor = '#abb2bf';
+                document.getElementById(`card0`).style.fontWeight = 'normal';
+                document.getElementById(`card1`).style.backgroundColor = '#abb2bf';
+                document.getElementById(`card1`).style.fontWeight = 'normal';
+                document.getElementById(`card2`).style.backgroundColor = '#abb2bf';
+                document.getElementById(`card2`).style.fontWeight = 'normal'; 
+                incrementPlayersTiebreaker() 
+                enableButtons();              
+                clearTimeout(myTimeout2);                 
+                setSuddenCounter(prev => prev + 1) 
+                if (suddenCounter + 1  >= quizLengthTiebreaker) {
+                    setGameState('over')
+                    setComplete(true);
+                }
+            }
+            
+              
+        } else {
+            const myTimeout3 = setTimeout(myStopFunction3, 5000);
+            
+            function myStopFunction3() {                                     
+                document.getElementById('correctCard').style.backgroundColor = '#abb2bf';
+                document.getElementById('correctCard').style.fontWeight = 'normal';        
+                document.getElementById(`card0`).style.backgroundColor = '#abb2bf';
+                document.getElementById(`card0`).style.fontWeight = 'normal';
+                document.getElementById(`card1`).style.backgroundColor = '#abb2bf';
+                document.getElementById(`card1`).style.fontWeight = 'normal';
+                document.getElementById(`card2`).style.backgroundColor = '#abb2bf';
+                document.getElementById(`card2`).style.fontWeight = 'normal';
+                incrementPlayersTiebreaker()     
+                enableButtons();           
+                clearTimeout(myTimeout3);
+                setSuddenCounter(prev => prev + 1) 
+                if (suddenCounter + 1  >= quizLengthTiebreaker) {
                     setGameState('over')
                     setComplete(true);                     
                 }
@@ -420,7 +617,10 @@ const GamePage = () => {
 
     const quizLength = questions.length;
 
+    const quizLengthTiebreaker = suddenDeathQuestion.length;
+
     function renderIncorrectAnswers (question) {
+        console.log('when it render qs', question)
         let arr = [];
               
         for (let index = 0; index < question.incorrect_answers.length; index++) {
@@ -437,6 +637,38 @@ const GamePage = () => {
         arr.push(   
             <div id="correct" className="card answer-card naked">
                 <button id='correctCard' onClick={handleClick} className="naked" style={{color: "red"}}>
+                    <div id="correct" className="card-body text-center">
+                        <p id="correct" className="card-text">{question.correct_answer.replace(regQuotes, '"').replace(regApost, '’').replace(funnyI, 'í').replace(funnyO,'ö').replace(aRing, 'å').replace(funnyA, 'ä').replace(funnyO2, 'ó').replace(softHyphen, '').replace(funnyA2, 'á').replace(funnyE, 'é').replace(andSymb, '&').replace(dots, '...')}</p>
+                    </div>
+                </button>
+            </div>) 
+        
+        shuffle(arr);     
+        return arr;
+    }
+
+    function renderIncorrectAnswersTiebreaker (question) {
+       
+        console.log('when it render new qs', question)
+        let arr = [];
+
+        document.getElementById('questionsSpan').textContent = 'question';
+              
+        for (let index = 0; index < question.incorrect_answers.length; index++) {
+            document.getElementById('questionsSpan').textContent = question[index];
+            arr.push(   
+                    <div id={index} className="card answer-card naked">
+                        <button id={`card${index}`} onClick={handleClickTiebreaker} className="naked">
+                            <div id={index} className="card-body text-center">
+                                <p id={index} className="card-text">{question.incorrect_answers[index].replace(regQuotes, '"').replace(regApost, '’').replace(funnyI, 'í').replace(funnyO,'ö').replace(aRing, 'å').replace(funnyA, 'ä').replace(funnyO2, 'ó').replace(softHyphen, '').replace(funnyA2, 'á').replace(funnyE, 'é').replace(andSymb, '&').replace(dots, '...')}</p>
+                                {/* <p id={index} className="card-text">{index}</p> */}
+                            </div>
+                        </button>
+                    </div>)  
+        } 
+        arr.push(   
+            <div id="correct" className="card answer-card naked">
+                <button id='correctCard' onClick={handleClickTiebreaker} className="naked" style={{color: "red"}}>
                     <div id="correct" className="card-body text-center">
                         <p id="correct" className="card-text">{question.correct_answer.replace(regQuotes, '"').replace(regApost, '’').replace(funnyI, 'í').replace(funnyO,'ö').replace(aRing, 'å').replace(funnyA, 'ä').replace(funnyO2, 'ó').replace(softHyphen, '').replace(funnyA2, 'á').replace(funnyE, 'é').replace(andSymb, '&').replace(dots, '...')}</p>
                     </div>
@@ -496,6 +728,100 @@ const GamePage = () => {
         return arr;
     }
 
+    function renderPlayersTiebreaker(times) {
+        let arr = [];
+        for (let i = 0; i < times; i++) {
+            if (i == 0) {
+                if( tiebreakerPlayers[0] == player1){
+                    arr.push(                       
+                        <div className="col-sm">
+                           <span id='playerScoreName'>{player1 + ": "}</span><span id='playerScoreNum'>{score1}</span>
+                        </div>
+                       )  
+                } else if(tiebreakerPlayers[0] == player2){
+                    arr.push(                       
+                        <div className="col-sm">
+                           <span id='playerScoreName'>{player2 + ": "}</span><span id='playerScoreNum'>{score2}</span>
+                        </div>
+                       )  
+                } else if(tiebreakerPlayers[0] == player3){
+                    arr.push(                       
+                        <div className="col-sm">
+                           <span id='playerScoreName'>{player3 + ": "}</span><span id='playerScoreNum'>{score3}</span>
+                        </div>
+                       )  
+                }                         
+            } else if (i == 1) {
+                if (tiebreakerPlayers[1] == player2) {
+                    arr.push(                       
+                        <div className="col-sm">
+                           <span id='playerScoreName'>{player2 + ": "}</span><span id='playerScoreNum'>{score2}</span>
+                        </div>
+                       )  
+                } else if(tiebreakerPlayers[1] == player3){
+                    arr.push(                       
+                        <div className="col-sm">
+                           <span id='playerScoreName'>{player3 + ": "}</span><span id='playerScoreNum'>{score3}</span>
+                        </div>
+                       )  
+                } else if (tiebreakerPlayers){
+                    arr.push(                       
+                        <div className="col-sm">
+                           <span id='playerScoreName'>{player4 + ": "}</span><span id='playerScoreNum'>{score4}</span>
+                        </div>
+                       )  
+                }                 
+                
+            } else if (i == 1) {
+                if (tiebreakerPlayers[1] == player2) {
+                    arr.push(                       
+                        <div className="col-sm">
+                           <span id='playerScoreName'>{player2 + ": "}</span><span id='playerScoreNum'>{score2}</span>
+                        </div>
+                       )  
+                } else if(tiebreakerPlayers[1] == player3){
+                    arr.push(                       
+                        <div className="col-sm">
+                           <span id='playerScoreName'>{player3 + ": "}</span><span id='playerScoreNum'>{score3}</span>
+                        </div>
+                       )  
+                } else if (tiebreakerPlayers[1] == player4){
+                    arr.push(                       
+                        <div className="col-sm">
+                           <span id='playerScoreName'>{player4 + ": "}</span><span id='playerScoreNum'>{score4}</span>
+                        </div>
+                       )  
+                }                 
+                
+            } else if (i == 2) {
+                if (tiebreakerPlayers[2] == player3) {
+                    arr.push(                       
+                        <div className="col-sm">
+                           <span id='playerScoreName'>{player3 + ": "}</span><span id='playerScoreNum'>{score3}</span>
+                        </div>
+                       )  
+                } else if(tiebreakerPlayers[1] == player4){
+                    arr.push(                       
+                        <div className="col-sm">
+                           <span id='playerScoreName'>{player4 + ": "}</span><span id='playerScoreNum'>{score4}</span>
+                        </div>
+                       )  
+                }                
+                
+            }else if (i == 1) {
+                if (tiebreakerPlayers[3] == player4) {
+                    arr.push(                       
+                        <div className="col-sm">
+                           <span id='playerScoreName'>{player4 + ": "}</span><span id='playerScoreNum'>{score4}</span>
+                        </div>
+                       ) 
+                    }               
+            }
+            
+        } 
+        return arr;
+    }
+
     function renderCurrentPlayer() {
         return (
             <h3 id='turnH3'>Your Turn <span id='playerInfoT'>{currentPlayer}</span>!</h3>
@@ -544,7 +870,7 @@ const GamePage = () => {
     return <>
                 <div className="jumbotron text-center" id="title">
                
-                    <h1 id="titleH1">The Quiz</h1>
+                    {tiebreaker ? <h1 id="titleH1" style={{color: "#ff5900"}}>Tiebreaker</h1> : <h1 id="titleH1">The Quiz</h1>}
                     <br/><br/>
                     {renderCurrentPlayer()}
                 </div>
@@ -558,11 +884,24 @@ const GamePage = () => {
                         </div>
                     </div>
                 </div> 
+                <div className="container-fluid justify-content-center text-center">
+                    <div className="row ">
+                        <div className="col-sm-12 ">
+                        <br/>
+                            <span id='questionsSpanSudden'>{questionDeath && <h3>{questionDeath.question.replace(regQuotes, '"').replace(regApost, '’').replace(funnyI, 'í').replace(funnyO,'ö').replace(aRing, 'å').replace(funnyA, 'ä').replace(funnyO2, 'ó').replace(softHyphen, '').replace(funnyA2, 'á').replace(funnyE, 'é').replace(andSymb, '&').replace(dots, '...')}</h3>}</span>
+                        </div>
+                    </div>
+                </div> 
                 <br/><br/>
                 <div className="container">
                 <div className="card-deck">
-                {question && renderIncorrectAnswers(question)}
+                {question && renderIncorrectAnswers(question) || questionDeath && renderIncorrectAnswersTiebreaker(questionDeath)}
                  
+                </div>
+                </div>
+                <div className="container" >
+                <div className="card-deck" id='suddenCards'>
+                {/* {questionDeath && renderIncorrectAnswersTiebreaker(questionDeath)} */}
                 </div>
                 </div>
                 <br/><br/><br/>
@@ -601,7 +940,7 @@ const GamePage = () => {
                
                 <div className="container justify-content-center text-center">
                     <div className="row " id='playerNames'>
-                        {renderPlayers(numOfPlayers)}
+                    {tiebreaker ? renderPlayersTiebreaker(numOfSuddenPlayers) : renderPlayers(numOfPlayers)}
                     </div>
                 </div>   
                 <br/><br/>             
