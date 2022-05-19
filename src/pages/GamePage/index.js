@@ -11,6 +11,8 @@ const GamePage = () => {
 
     const[questions, setQuestions] = useState([]); 
 
+    const[suddenDeathQuestion, setSuddenDeathQuestion] = useState([]); 
+
     const[counter, setCounter] = useState(0);
 
     const[score1, setScore1] = useState(0);
@@ -68,8 +70,22 @@ const GamePage = () => {
         if(tiebreaker){
             console.log("made it to tiebreaker useEffect")
             console.log("the players at this stage:" , tiebreakerPlayers)
+            async function getQuestions () {
+
+                try {
+                    const result = await axios.get(`https://opentdb.com/api.php?amount=1&category=${categoryID}&difficulty=${difficulty.toLowerCase()}&type=multiple`);
+                    setSuddenDeathQuestion(result.data.results)                         
+                } catch(err) {
+                    console.error(err);
+                }       
+            }
+            getQuestions();
         }
     },[tiebreaker])
+
+    useEffect( () => {
+        console.log("suddenDeathQuesion: ", suddenDeathQuestion)
+    }, [suddenDeathQuestion])
 
     // useEffect( () => {
     //     async function sendToDB() {
