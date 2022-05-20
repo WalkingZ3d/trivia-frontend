@@ -16,6 +16,11 @@ const PlayersPage = () => {
         // console.log("categoryID selected: ", categoryID);
     }, [])
 
+    //function to navigate back
+    function handleBack() {
+        navigate(-1);
+    }
+
     async function handleSubmit(e) {
         e.preventDefault();
         let player1 = document.getElementById('numPlayer1').value;
@@ -87,6 +92,8 @@ const PlayersPage = () => {
 
                     <input type='submit' value='Next' id='cardBtn'/>
                 </form>
+                <br></br>
+                <input type='submit' value='Back' id='cardBtn' onClick={handleBack}/>
                 </div>
             </div>
             <br/>
