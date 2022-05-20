@@ -73,7 +73,7 @@ const OptionsPage = () => {
                 <div className="col-sm-12 ">
                 <form onSubmit={handleSubmit} role="form"> 
                     <label htmlFor="numPlayers" className='optionsLabel'>Number of Players: </label>
-                    <input type="number" id='numPlayers' name='numPlayers' className='optionsInp' min='1' max='4' defaultValue='1'/>
+                    <input type="number" id='numPlayers' name='numPlayers' className='optionsInp' min='1' max='4' defaultValue='2'/>
                     <br/><br/>
                     <label htmlFor="category" className='optionsLabel'>Category:</label>
                     <select type="text" id='category' name='category' className='optionsInp'>
