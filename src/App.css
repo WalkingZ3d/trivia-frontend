@@ -15,6 +15,12 @@
     text-align: right !important;  
 }
 
+#endOfTiebreaker {
+    font-size: 22pt;
+    color: #ff5900;
+    
+}
+
 #playerNames {
     color: #fff;
     text-align: center;

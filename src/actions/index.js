@@ -114,3 +114,15 @@ export const getPlayer4 = player4 => {
         };
     };
 };
+
+const loadPlayerSudden1 = playerSudden1 => ({ type: 'ADD_PLAYER_SUDDEN1', payload: playerSudden1 });
+export const getPlayerSudden1 = playerSudden1 => {
+    return async dispatch => {
+        try {
+            dispatch(loadPlayerSudden1(playerSudden1));
+        } catch (err) {
+            console.warn(err.message);
+            dispatch({ type: 'SET_ERROR', payload: err.message })
+        };
+    };
+};

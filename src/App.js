@@ -1,6 +1,6 @@
 import React from "react";
 import {Routes, Route } from "react-router-dom";
-import {IndexPage, NotFoundPage, AboutPage, ExamplePage, OptionsPage, PlayersPage, GamePage, HighScorePage } from "./pages";
+import {IndexPage, NotFoundPage, AboutPage, ExamplePage, OptionsPage, PlayersPage, GamePage, HighScorePage, SuddenDeathPage } from "./pages";
 import {default as Layout} from "./layouts";
 import './App.css';
 
@@ -13,6 +13,7 @@ const App = () => {
                         <Route path="options" element={<OptionsPage />}/>
                             <Route path="/options/players" element={<PlayersPage />}/>
                                 <Route path="/options/players/game"  element={<GamePage />}/>
+                                    <Route path="/options/players/game/suddendeath"  element={<SuddenDeathPage />}/>
                 </Route>
                 <Route path="/about" element={<AboutPage />}/>
                 <Route path="*" element={<NotFoundPage />}/>

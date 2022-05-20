@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import * as ReactDOM from 'react-dom';
+import { getPlayerSudden1 } from '../../actions';
 
 const GamePage = () => {
 
@@ -46,6 +47,8 @@ const GamePage = () => {
     const[tiebreakerPlayers, setTiebreakerPlayers] = useState([])
 
     const[numOfSuddenPlayers, setNumOfSuddenPlayers] = useState(0);
+
+    const[tiebreakerOver, setTiebreakerOver] = useState(false);
     
     const categoryID = useSelector(state => state.categoryID);
     const numOfTurns = useSelector(state => state.numOfTurns);
@@ -68,6 +71,14 @@ const GamePage = () => {
         setNextPlayer(player2)
     }, [])
 
+    useEffect( () => {
+        if (tiebreakerOver) {
+            console.log('winner is: ', player1)
+            document.getElementById('turnH3').style.display = 'none';
+            document.getElementById('nextH3').style.display = 'none';
+            document.getElementById('endOfTiebreaker').textContent = 'The Winner Is: ' + player1 
+        }        
+    }, [tiebreakerOver])
 
     // useEffect( () => {
     //     if(scoreChange){
@@ -295,20 +306,6 @@ const questionDeath = suddenDeathQuestion[suddenCounter]
                     setNextSuddenPlayer(player3)
                 }
             }
-
-
-
-        //     if (nextPlayer === player2) {
-        //         setNextPlayer(player1)
-        //     } else if (nextPlayer === player1) {
-        //         setNextPlayer(player2)
-        //     }                         
-        // } else if( numOfSuddenPlayers === 3){
-        //     if (nextPlayer === player2) {
-        //         setNextPlayer(player1)
-        //     } else if (nextPlayer === player1) {
-        //         setNextPlayer(player2)
-        //     }  
         }
         
         setCurrentSuddenPlayer(nextPlayer)
@@ -394,10 +391,16 @@ const questionDeath = suddenDeathQuestion[suddenCounter]
             setTiebreaker(true)
             console.log('tiebreaker true') 
             setTiebreakerPlayers(winsFinal);
+            // let updatePlayerSudden1 = playerSudden1 => dispatch(getPlayerSudden1(playerSudden1));
+            // updatePlayerSudden1(player1);
+            // navigate('/options/players/game/suddendeath')
         } else if (numOfPlayers == 1 && score1 === 0){
             setTiebreaker(true)
             console.log('tiebreaker true for one player')  
             setTiebreakerPlayers(winsFinal);
+            // let updatePlayerSudden1 = playerSudden1 => dispatch(getPlayerSudden1(playerSudden1));
+            // updatePlayerSudden1(player1);
+            // navigate('/options/players/game/suddendeath')
         }  else {
             console.log('tiebreaker false') 
             setWinner(winsFinal)
@@ -583,9 +586,15 @@ const questionDeath = suddenDeathQuestion[suddenCounter]
                 enableButtons();              
                 clearTimeout(myTimeout2);                 
                 setSuddenCounter(prev => prev + 1) 
-                if (suddenCounter + 1  >= quizLengthTiebreaker) {
-                    setGameState('over')
-                    setComplete(true);
+                const myTimeout4 = setTimeout(myStopFunction4, 2000);
+            
+                function myStopFunction4() { 
+                    console.log('score 1 in tiebreaker:', score1)
+                    console.log('score 2 in tiebreaker:', score2)
+                    if (score1 > score2 || score2 > score1) {
+                    setTiebreakerOver(true)   
+                    clearTimeout(myTimeout4);                 
+                    }
                 }
             }
             
@@ -606,9 +615,17 @@ const questionDeath = suddenDeathQuestion[suddenCounter]
                 enableButtons();           
                 clearTimeout(myTimeout3);
                 setSuddenCounter(prev => prev + 1) 
-                if (suddenCounter + 1  >= quizLengthTiebreaker) {
-                    setGameState('over')
-                    setComplete(true);                     
+                
+
+                const myTimeout4 = setTimeout(myStopFunction4, 2000);
+            
+                function myStopFunction4() { 
+                    console.log('score 1 in tiebreaker:', score1)
+                    console.log('score 2 in tiebreaker:', score2)
+                    if (score1 > score2 || score2 > score1) {
+                    setTiebreakerOver(true)   
+                    clearTimeout(myTimeout4);                 
+                    }
                 }
             }                    
         }     
@@ -913,13 +930,13 @@ const questionDeath = suddenDeathQuestion[suddenCounter]
                         </div>
                     </div>
 
-                {/* <div className="container-fluid justify-content-center text-center">
+                <div className="container-fluid justify-content-center text-center">
                     <div className="row ">
                         <div className="col-sm-12 ">
-                            
+                            <div id='endOfTiebreaker'></div>
                         </div>
                     </div>
-                </div> */}
+                </div>
                 
                 <div className="container-fluid justify-content-center text-center">
                     <div className="row row-cols-1">
